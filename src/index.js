@@ -8,7 +8,7 @@ import 'jquery/dist/jquery.min'
 import 'popper.js/dist/umd/popper.min'
 import 'bootstrap/dist/js/bootstrap.min'
 
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+// registerServiceWorker();
