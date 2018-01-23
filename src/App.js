@@ -16,17 +16,13 @@ class App extends Component {
     }
 
     store.addListener(() => {
-      let sortByUNIX = store.state.messageArrived.sort((a, b) => {
-        return b.unix - a.unix
+      let storeData = store.state.messageArrived
+      let devices = []
+      Object.keys(storeData).forEach((myName) => {
+        devices.push(storeData[myName])
       })
-
-      let filterDeviceByName = _.uniq(sortByUNIX, data => {
-        let convertStringToJSON = JSON.parse(data.payloadString)
-        return convertStringToJSON.d.myName
-      })
-
       this.setState({
-        messages: filterDeviceByName,
+        messages: devices,
         connection: store.state.connection
       })
     })

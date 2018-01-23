@@ -43,7 +43,10 @@ class MyStore extends Store {
     }
 
     if (action.type === ActionTypes.MQTT_MESSAGE_ARRIVED) {
-      this.state.messageArrived = [...this.state.messageArrived, action.data]
+      let obj = JSON.parse(action.data.payloadString)
+      let messageArrived = this.state.messageArrived
+      messageArrived[obj.d.myName] = action.data
+      this.state.messageArrived = messageArrived
       this.__emitChange()
     }
 
