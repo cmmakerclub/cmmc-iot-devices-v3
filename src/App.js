@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Navbar from './components/Navbar'
 import Connection from './components/Connection.js'
-import Device from './components/Device'
 import store from './flux/Store'
 import uuid from 'uuid'
 import _ from 'underscore'
+import Devices from './components/Devices'
 
 class App extends Component {
 
@@ -18,14 +18,20 @@ class App extends Component {
     store.addListener(() => {
       let storeData = store.state.messageArrived
       let devices = []
+
       Object.keys(storeData).forEach((myName) => {
         devices.push(storeData[myName])
       })
+
       this.setState({
         messages: devices,
         connection: store.state.connection
       })
     })
+  }
+
+  componentWillUpdate () {
+    // console.log(this.state.messages)
   }
 
   render () {
@@ -43,7 +49,7 @@ class App extends Component {
                 <h3>Devices</h3>
               </div>
               <div className="row">
-                {this.state.messages.map(object => <Device key={uuid()} data={object}/>)}
+                <Devices/>
               </div>
             </div>
 

@@ -38,21 +38,24 @@ const MQTTConnect = (init) => {
     let messageIncome = JSON.parse(message.toString())
 
     if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
-      if (packet.retain === false) {
-        let data = {
-          destinationName: packet.topic,
-          payloadString: packet.payload.toString(),
-          qos: packet.qos,
-          timestamp: moment().format('DD/MM/YYYY HH:mm:ss'),
-          unix: moment.now(),
+      // if (packet.retain === false) {
+      //   let data = {
+          // destinationName: packet.topic,
+          // payloadString: packet.payload.toString(),
+          // qos: packet.qos,
+          // timestamp: moment().format('DD/MM/YYYY HH:mm:ss'),
+          // unix: moment.now(),
           // retained: packet.retain
-        }
+        // }
+
+        let data = JSON.parse(message.toString())
+        data.d.timestamp = moment.now()
 
         Dispatcher.dispatch({
           type: TypeActions.MQTT_MESSAGE_ARRIVED,
           data: data
         })
-      }
+      // }
     }
 
   })
