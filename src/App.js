@@ -4,6 +4,7 @@ import Connection from './components/Connection.js'
 import store from './flux/Store'
 import uuid from 'uuid'
 import _ from 'underscore'
+import logo from './assets/cmmc-logo.png'
 import Devices from './components/Devices'
 
 class App extends Component {
@@ -30,29 +31,46 @@ class App extends Component {
     })
   }
 
-  componentWillUpdate () {
-    // console.log(this.state.messages)
-  }
-
   render () {
+
+    const hiddenWhenConnectingFail = !this.state.connection && 'none'
+    const hiddenWhenConnectingSuccess = this.state.connection && 'none'
+
     return (
       <div className="container">
-        <Navbar/>
+        {/*<Navbar/>*/}
         <div className="row">
-          <div className="col-3" style={{marginTop: 20, display: this.state.connection && 'none'}}>
+          <div className="col-12" style={{marginTop: 20, display: hiddenWhenConnectingSuccess}}>
             <Connection/>
           </div>
-          <div className={this.state.connection ? 'col-12' : 'col-9'} style={{marginTop: 20}}>
-
+          <div className='col-12' style={{marginTop: 20, display: hiddenWhenConnectingFail}}>
             <div className="form-group">
-              <div className="form-group">
-                <h3>Devices</h3>
+
+              <div className="row">
+                <div className="col-2 text-center">
+                  <img src={logo} style={{height: 30}} alt=""/>
+                </div>
+                <div className="col text-right">
+                  <h3>
+                    Connection <i className={this.state.connection && 'fa fa-circle text-success'}/>
+                  </h3>
+                </div>
               </div>
+
+              <hr/>
+
+              {/*<div className="form-group">*/}
+                {/**/}
+                {/*<h3>*/}
+                  {/*<i className={this.state.connection && 'fa fa-circle text-success'}/>&ensp;*/}
+                  {/*{this.state.connection && 'Devices'}*/}
+                {/*</h3>*/}
+              {/*</div>*/}
+
               <div className="row">
                 <Devices/>
               </div>
             </div>
-
           </div>
         </div>
       </div>
