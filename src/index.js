@@ -7,6 +7,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import 'jquery/dist/jquery.min'
 import 'popper.js/dist/umd/popper.min'
 import 'bootstrap/dist/js/bootstrap.min'
+import './App.css'
 
 // import registerServiceWorker from './registerServiceWorker';
 

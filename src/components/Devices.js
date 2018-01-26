@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import store from '../flux/Store'
 import uuid from 'uuid'
+import Modal from 'react-modal'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -11,7 +12,10 @@ export default class Devices extends Component {
     super(props)
 
     this.state = {
-      devices: []
+      devices: [],
+      modalIsOpen: false,
+      tableInfoContent: [],
+      tableDataContent: []
     }
 
     store.addListener(() => {
@@ -33,17 +37,57 @@ export default class Devices extends Component {
       })
 
     })
+
+    Modal.setAppElement('#root')
   }
 
   componentWillMount () {
     setInterval(() => {
       this.state.devices.map((device, idx) => {
         let d = this.state.devices
-        // d[idx].d.timestampAfter = moment(device.d.timestampBefore).fromNow()
         d[idx].classUpdate = 'text-primary'
         this.setState({devices: d})
       })
     }, 1000)
+  }
+
+  openModal = () => {
+    this.setState({modalIsOpen: true})
+  }
+
+  closeModal = () => {
+    this.setState({modalIsOpen: false})
+  }
+
+  handleClickInfo = (e, info, d) => {
+    e.preventDefault()
+
+    let tableInfoContent = []
+    let tableDataContent = []
+
+    Object.keys(info).forEach((key) => {
+      tableInfoContent.push(
+        <tr key={uuid()}>
+          <td>{key}</td>
+          <td>{info[key]}</td>
+        </tr>
+      )
+    })
+
+    Object.keys(d).forEach((key) => {
+      tableDataContent.push(
+        <tr key={uuid()}>
+          <td>{key}</td>
+          <td>{d[key]}</td>
+        </tr>
+      )
+    })
+
+    this.setState({
+      tableInfoContent: tableInfoContent,
+      tableDataContent: tableDataContent
+    })
+    this.openModal()
   }
 
   render () {
@@ -52,6 +96,35 @@ export default class Devices extends Component {
 
       let d = props.data.d
       let info = props.data.info
+
+      const styles = {
+        content: {marginBottom: 5},
+        footer: {marginBottom: 0},
+        customStyle: {
+          overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.75)'
+          },
+          content: {
+            position: 'absolute',
+            top: '40px',
+            left: '40px',
+            right: '40px',
+            bottom: '40px',
+            border: '1px solid #ccc',
+            background: '#fff',
+            overflow: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            borderRadius: '4px',
+            outline: 'none',
+            padding: '20px'
+          }
+        }
+      }
 
       return (
         <div className="col-3">
@@ -70,29 +143,46 @@ export default class Devices extends Component {
                   <i className='fa fa-clock-o'/>&ensp;
                   {moment(d.timestamp).fromNow()}
                 </p>
-                <button className='btn btn-primary' style={{width: '100%'}} onClick={this.handleClickInfo}>
+                <button className='btn btn-primary' style={{width: '100%'}} onClick={(e) => this.handleClickInfo(e, info, d)}>
                   MORE INFO
                 </button>
-                {/*<Modal*/}
-                {/*isOpen={this.state.modalIsOpen}*/}
-                {/*style={styles.customStyle}*/}
-                {/*contentLabel="Modal"*/}
-                {/*>*/}
-                {/*<table className='table table-bordered'>*/}
-                {/*<thead>*/}
-                {/*<tr>*/}
-                {/*<th>Key</th>*/}
-                {/*<th>Value</th>*/}
-                {/*/!*<th>Data Key</th>*!/*/}
-                {/*/!*<th>Value</th>*!/*/}
-                {/*</tr>*/}
-                {/*</thead>*/}
-                {/*<tbody>*/}
-                {/*{this.state.tableContent.map(d => d)}*/}
-                {/*</tbody>*/}
-                {/*</table>*/}
-                {/*<button className='btn btn-danger float-right' onClick={this.closeModal}>Close</button>*/}
-                {/*</Modal>*/}
+                <Modal
+                  isOpen={this.state.modalIsOpen}
+                  style={styles.customStyle}
+                  contentLabel="Modal"
+                >
+
+                  <div className='row'>
+                    <div className="col-6 text-center">
+                      <table className='table table-bordered'>
+                        <thead>
+                        <tr>
+                          <th>InfoKey</th>
+                          <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.tableInfoContent.map(d => d)}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="col-6 text-center">
+                      <table className='table table-bordered'>
+                        <thead>
+                        <tr>
+                          <th>DataKey</th>
+                          <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.tableDataContent.map(d => d)}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <button className='btn btn-danger float-right' onClick={this.closeModal}>Close</button>
+                </Modal>
               </div>
             </div>
           </div>
