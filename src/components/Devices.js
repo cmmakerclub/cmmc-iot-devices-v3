@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import store from '../flux/Store'
 import uuid from 'uuid'
 import Modal from 'react-modal'
@@ -20,52 +21,62 @@ export default class Devices extends Component {
     }
 
     store.addListener(() => {
-      let storeData = store.state.messageArrived
-      let listDevices = []
-      let stateDevices = this.state.devices
 
-      Object.keys(storeData).forEach((myName, idx) => {
-        if (stateDevices[idx] !== undefined) {
-          if (storeData[myName].d.timestamp > stateDevices[idx].d.timestamp) {
-            storeData[myName].classUpdate = 'text-danger'
+      if (store.state.connection) {
+        let storeData = store.state.messageArrived
+        let listDevices = []
+        let stateDevices = this.state.devices
 
-            if (this.state.currentDevice === myName) {
-              let tableInfoContent = []
-              let tableDataContent = []
+        Object.keys(storeData).forEach((myName, idx) => {
+          if (stateDevices[idx] !== undefined) {
+            if (storeData[myName].d.timestamp > stateDevices[idx].d.timestamp) {
+              storeData[myName].classUpdate = 'text-danger'
 
-              Object.keys(storeData[myName].info).forEach((key) => {
-                tableInfoContent.push(
-                  <tr key={uuid()}>
-                    <td>{key}</td>
-                    <td>{storeData[myName].info[key]}</td>
-                  </tr>
-                )
-              })
+              if (this.state.currentDevice === myName) {
+                let tableInfoContent = []
+                let tableDataContent = []
 
-              Object.keys(storeData[myName].d).forEach((key) => {
-                tableDataContent.push(
-                  <tr key={uuid()}>
-                    <td>{key}</td>
-                    <td>{storeData[myName].d[key]}</td>
-                  </tr>
-                )
-              })
+                Object.keys(storeData[myName].info).forEach((key) => {
+                  tableInfoContent.push(
+                    <tr key={uuid()}>
+                      <td>{key}</td>
+                      <td>{storeData[myName].info[key]}</td>
+                    </tr>
+                  )
+                })
 
-              this.setState({
-                tableInfoContent: tableInfoContent,
-                tableDataContent: tableDataContent
-              })
+                Object.keys(storeData[myName].d).forEach((key) => {
+                  tableDataContent.push(
+                    <tr key={uuid()}>
+                      <td>{key}</td>
+                      <td>{storeData[myName].d[key]}</td>
+                    </tr>
+                  )
+                })
+
+                this.setState({
+                  tableInfoContent: tableInfoContent,
+                  tableDataContent: tableDataContent
+                })
+
+              }
 
             }
-
           }
-        }
-        listDevices.push(storeData[myName])
-      })
+          listDevices.push(storeData[myName])
+        })
 
-      this.setState({
-        devices: listDevices
-      })
+        this.setState({
+          devices: listDevices
+        })
+      } else {
+
+        this.setState({
+          devices: []
+        })
+
+        ReactDOM.render(<div></div>, document.getElementById('myDevices'))
+      }
 
     })
 
@@ -161,7 +172,7 @@ export default class Devices extends Component {
       }
 
       return (
-        <div className="col-12 col-md-3">
+        <div className="col-12 col-md-4">
           <div className="form-group">
             <div className="card">
               <div className="card-header bg-success">
@@ -225,7 +236,11 @@ export default class Devices extends Component {
       )
     }
 
-    return this.state.devices.map(obj => <Component key={uuid()} data={obj}/>)
+    return (
+      <div id='myDevices' className='row'>
+        {this.state.devices.map(obj => <Component key={uuid()} data={obj}/>)}
+      </div>
+    )
   }
 
 }

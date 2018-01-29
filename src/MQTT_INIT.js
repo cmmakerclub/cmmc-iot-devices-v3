@@ -7,7 +7,7 @@ moment.locale('th')
 
 window.MQTTGlobal = ''
 
-const MQTTConnect = (init) => {
+const MQTT_Connect = (init) => {
 
   console.log(init)
 
@@ -62,11 +62,16 @@ const MQTTConnect = (init) => {
 
 }
 
-const MQTTClearRetain = (topic) => {
+const MQTT_ClearRetain = (topic) => {
   window.MQTTGlobal.publish(topic, null, {retain: true})
 }
 
+const MQTT_Disconnect = () => {
+  window.MQTTGlobal.end()
+}
+
 export {
-  MQTTConnect,
-  MQTTClearRetain
+  MQTT_Connect,
+  MQTT_ClearRetain,
+  MQTT_Disconnect
 }

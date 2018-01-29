@@ -39,37 +39,38 @@ class App extends Component {
     return (
       <div className="container">
         {/*<Navbar/>*/}
-        <div className="row">
-          <div className="col-12" style={{marginTop: 20, display: hiddenWhenConnectingSuccess}}>
+        <div className="row" style={{marginTop: 20}}>
+          {/*<div className="col-12 col-md-3" style={{marginTop: 20, display: hiddenWhenConnectingSuccess}}>*/}
+          <div className="col-12 col-md-3">
             <Connection/>
           </div>
-          <div className='col-12' style={{marginTop: 20, display: hiddenWhenConnectingFail}}>
+          {/*<div className='col-12' style={{marginTop: 20, display: hiddenWhenConnectingFail}}>*/}
+          <div className='col-12 col-md-9'>
             <div className="form-group">
 
-              <div className="row">
-                <div className="col-12 col-md-2 text-center">
-                  <img src={logo} style={{height: 30}} alt=""/>
-                </div>
-                <div className="col text-right">
-                  <h3>
-                    Connection <i className={this.state.connection ? 'fa fa-circle text-success' : 'block'}/>
-                  </h3>
-                </div>
-              </div>
-
-              <hr/>
-
-              {/*<div className="form-group">*/}
-                {/**/}
-                {/*<h3>*/}
-                  {/*<i className={this.state.connection && 'fa fa-circle text-success'}/>&ensp;*/}
-                  {/*{this.state.connection && 'Devices'}*/}
-                {/*</h3>*/}
+              {/*<div className="row">*/}
+              {/*<div className="col-12 col-md-2 text-center">*/}
+              {/*<img src={logo} style={{height: 30}} alt=""/>*/}
+              {/*</div>*/}
+              {/*<div className="col text-right">*/}
+              {/*<h3>*/}
+              {/*Connection <i className={this.state.connection ? 'fa fa-circle text-success' : 'block'}/>*/}
+              {/*</h3>*/}
+              {/*</div>*/}
               {/*</div>*/}
 
-              <div className="row">
-                <Devices/>
-              </div>
+              {/*<hr/>*/}
+
+              {/*<div className="form-group">*/}
+              {/**/}
+              {/*<h3>*/}
+              {/*<i className={this.state.connection && 'fa fa-circle text-success'}/>&ensp;*/}
+              {/*{this.state.connection && 'Devices'}*/}
+              {/*</h3>*/}
+              {/*</div>*/}
+
+              <Devices/>
+
             </div>
           </div>
         </div>
