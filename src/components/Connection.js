@@ -29,7 +29,7 @@ export default class Connection extends Component {
   render () {
     return (
       <div className="row">
-        <div className="col-4 offset-4">
+        <div className="col-12 col-md-4 offset-md-4">
           <div className="form-group">
             <div className="card">
               <div className="card-body">

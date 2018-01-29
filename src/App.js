@@ -33,8 +33,8 @@ class App extends Component {
 
   render () {
 
-    const hiddenWhenConnectingFail = !this.state.connection && 'none'
-    const hiddenWhenConnectingSuccess = this.state.connection && 'none'
+    const hiddenWhenConnectingFail = !this.state.connection ? 'none' : 'block'
+    const hiddenWhenConnectingSuccess = this.state.connection ? 'none' : 'block'
 
     return (
       <div className="container">
@@ -47,12 +47,12 @@ class App extends Component {
             <div className="form-group">
 
               <div className="row">
-                <div className="col-2 text-center">
+                <div className="col-12 col-md-2 text-center">
                   <img src={logo} style={{height: 30}} alt=""/>
                 </div>
                 <div className="col text-right">
                   <h3>
-                    Connection <i className={this.state.connection && 'fa fa-circle text-success'}/>
+                    Connection <i className={this.state.connection ? 'fa fa-circle text-success' : 'block'}/>
                   </h3>
                 </div>
               </div>

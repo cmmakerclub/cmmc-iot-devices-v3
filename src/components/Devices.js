@@ -15,7 +15,8 @@ export default class Devices extends Component {
       devices: [],
       modalIsOpen: false,
       tableInfoContent: [],
-      tableDataContent: []
+      tableDataContent: [],
+      currentDevice: ''
     }
 
     store.addListener(() => {
@@ -27,6 +28,36 @@ export default class Devices extends Component {
         if (stateDevices[idx] !== undefined) {
           if (storeData[myName].d.timestamp > stateDevices[idx].d.timestamp) {
             storeData[myName].classUpdate = 'text-danger'
+
+            if (this.state.currentDevice === myName) {
+              let tableInfoContent = []
+              let tableDataContent = []
+
+              Object.keys(storeData[myName].info).forEach((key) => {
+                tableInfoContent.push(
+                  <tr key={uuid()}>
+                    <td>{key}</td>
+                    <td>{storeData[myName].info[key]}</td>
+                  </tr>
+                )
+              })
+
+              Object.keys(storeData[myName].d).forEach((key) => {
+                tableDataContent.push(
+                  <tr key={uuid()}>
+                    <td>{key}</td>
+                    <td>{storeData[myName].d[key]}</td>
+                  </tr>
+                )
+              })
+
+              this.setState({
+                tableInfoContent: tableInfoContent,
+                tableDataContent: tableDataContent
+              })
+
+            }
+
           }
         }
         listDevices.push(storeData[myName])
@@ -48,6 +79,7 @@ export default class Devices extends Component {
         d[idx].classUpdate = 'text-primary'
         this.setState({devices: d})
       })
+      // console.log(this.state.devices)
     }, 1000)
   }
 
@@ -85,8 +117,10 @@ export default class Devices extends Component {
 
     this.setState({
       tableInfoContent: tableInfoContent,
-      tableDataContent: tableDataContent
+      tableDataContent: tableDataContent,
+      currentDevice: d.myName
     })
+
     this.openModal()
   }
 
@@ -127,7 +161,7 @@ export default class Devices extends Component {
       }
 
       return (
-        <div className="col-3">
+        <div className="col-12 col-md-3">
           <div className="form-group">
             <div className="card">
               <div className="card-header bg-success">
@@ -143,7 +177,8 @@ export default class Devices extends Component {
                   <i className='fa fa-clock-o'/>&ensp;
                   {moment(d.timestamp).fromNow()}
                 </p>
-                <button className='btn btn-primary' style={{width: '100%'}} onClick={(e) => this.handleClickInfo(e, info, d)}>
+                <button className='btn btn-primary' style={{width: '100%'}}
+                        onClick={(e) => this.handleClickInfo(e, info, d)}>
                   MORE INFO
                 </button>
                 <Modal
@@ -153,7 +188,7 @@ export default class Devices extends Component {
                 >
 
                   <div className='row'>
-                    <div className="col-6 text-center">
+                    <div className="col-12 col-md-6 text-center">
                       <table className='table table-bordered'>
                         <thead>
                         <tr>
@@ -166,7 +201,7 @@ export default class Devices extends Component {
                         </tbody>
                       </table>
                     </div>
-                    <div className="col-6 text-center">
+                    <div className="col-12 col-md-6 text-center">
                       <table className='table table-bordered'>
                         <thead>
                         <tr>
