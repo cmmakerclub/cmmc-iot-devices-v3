@@ -38,3 +38,7 @@ td {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
 }
+
+.card {
+  box-shadow: 5px 5px #f2f2f2;
+}
