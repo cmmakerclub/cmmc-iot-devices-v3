@@ -223,7 +223,7 @@ export default class Devices extends Component {
                   <i className='fa fa-clock-o'/>&ensp;
                   {moment(d.timestamp).fromNow()}
                 </p>
-                <button className='btn btn-primary' style={{width: '100%'}}
+                <button className='btn' style={{width: '100%', backgroundColor: '#0D86D9', color: 'white'}}
                         onClick={(e) => this.handleClickInfo(e, info, d)}>
                   MORE INFO
                 </button>
