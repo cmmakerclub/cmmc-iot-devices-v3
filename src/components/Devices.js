@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import store from '../flux/Store'
 import uuid from 'uuid'
 import Modal from 'react-modal'
+import { initWeightTable } from './Weight.config'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -17,7 +18,19 @@ export default class Devices extends Component {
       modalIsOpen: false,
       tableInfoContent: [],
       tableDataContent: [],
-      currentDevice: ''
+      currentDevice: '',
+      tableHeaderFirst: [
+        <tr key={uuid()}>
+          <th>DataKey</th>
+          <th>Value</th>
+        </tr>
+      ],
+      tableHeaderSecond: [
+        <tr key={uuid()}>
+          <th>InfoKey</th>
+          <th>Value</th>
+        </tr>
+      ]
     }
 
     store.addListener(() => {
@@ -33,6 +46,9 @@ export default class Devices extends Component {
               storeData[myName].classUpdate = 'text-danger'
 
               if (this.state.currentDevice === myName) {
+
+                initWeightTable(storeData[myName].info, storeData[myName].d)
+
                 let tableInfoContent = []
                 let tableDataContent = []
 
@@ -105,6 +121,8 @@ export default class Devices extends Component {
   handleClickInfo = (e, info, d) => {
     e.preventDefault()
 
+    this.setState({weightTable: initWeightTable(info, d)})
+
     let tableInfoContent = []
     let tableDataContent = []
 
@@ -125,6 +143,15 @@ export default class Devices extends Component {
         </tr>
       )
     })
+
+    let resultWeight = initWeightTable(info, d)
+
+    if (resultWeight) {
+      this.setState({
+        tableHeaderFirst: [resultWeight[0]],
+        tableHeaderSecond: [resultWeight[1]]
+      })
+    }
 
     this.setState({
       tableInfoContent: tableInfoContent,
@@ -202,10 +229,7 @@ export default class Devices extends Component {
                     <div className="col-12 col-md-6 text-center">
                       <table className='table table-bordered'>
                         <thead>
-                        <tr>
-                          <th>InfoKey</th>
-                          <th>Value</th>
-                        </tr>
+                        {this.state.tableHeaderFirst.map(header => header)}
                         </thead>
                         <tbody>
                         {this.state.tableInfoContent.map(d => d)}
@@ -215,10 +239,7 @@ export default class Devices extends Component {
                     <div className="col-12 col-md-6 text-center">
                       <table className='table table-bordered'>
                         <thead>
-                        <tr>
-                          <th>DataKey</th>
-                          <th>Value</th>
-                        </tr>
+                        {this.state.tableHeaderSecond.map(header => header)}
                         </thead>
                         <tbody>
                         {this.state.tableDataContent.map(d => d)}
