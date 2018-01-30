@@ -216,7 +216,7 @@ export default class Devices extends Component {
               <div className="card-body text-primary">
                 <p>ip : {info.ip}</p>
                 <p>heap : {d.heap}</p>
-                <p>run time : {((d.millis / 60000) / 60).toFixed(2)} hour</p>
+                <p>run time : {moment(moment.now() - d.millis).fromNow()}</p>
                 <p>millis : {d.millis}</p>
                 <p>prefix : {info.prefix}</p>
                 <p className={props.data.classUpdate}>
