@@ -43,7 +43,9 @@ export default class Devices extends Component {
         Object.keys(storeData).forEach((myName, idx) => {
           if (stateDevices[idx] !== undefined) {
             if (storeData[myName].d.timestamp > stateDevices[idx].d.timestamp) {
+
               storeData[myName].classUpdate = 'text-danger'
+              storeData[myName].classCardHeader = 'card-header bg-success'
 
               if (this.state.currentDevice === myName) {
 
@@ -104,6 +106,12 @@ export default class Devices extends Component {
       this.state.devices.map((device, idx) => {
         let d = this.state.devices
         d[idx].classUpdate = 'text-primary'
+
+        let diff = moment.now() - d[idx].d.timestamp
+        if (diff > (60000 * 5)) {
+          d[idx].classCardHeader = 'card-header bg-secondary'
+        }
+
         this.setState({devices: d})
       })
       // console.log(this.state.devices)
@@ -202,7 +210,7 @@ export default class Devices extends Component {
         <div className="col-12 col-md-4">
           <div className="form-group">
             <div className="card">
-              <div className="card-header bg-success">
+              <div className={props.data.classCardHeader}>
                 <span style={{color: 'white'}}>{d.myName}</span>
               </div>
               <div className="card-body text-primary">

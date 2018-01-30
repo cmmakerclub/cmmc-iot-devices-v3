@@ -51,6 +51,12 @@ const MQTT_Connect = (init) => {
         let data = JSON.parse(message.toString())
         data.d.timestamp = moment.now()
 
+        if (packet.retain) {
+          data.classCardHeader = 'card-header bg-secondary'
+        } else {
+          data.classCardHeader = 'card-header bg-success'
+        }
+
         Dispatcher.dispatch({
           type: TypeActions.MQTT_MESSAGE_ARRIVED,
           data: data
