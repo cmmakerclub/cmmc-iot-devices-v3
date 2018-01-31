@@ -6,7 +6,7 @@ export default class Content extends Component {
 
   render () {
     return (
-      <div className='col-12 col-md-9'>
+      <div className='col-12 col-md-12'>
         <div className="form-group">
           <div style={{display: this.props.hiddenDiv}} className='text-right'>
             Please wait a few minute&ensp;<img src={loading} style={{width: 30}} alt=""/>

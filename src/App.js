@@ -3,6 +3,7 @@ import Connection from './components/Connection.js'
 import store from './flux/Store'
 import Filter from './components/Filter'
 import Content from './components/Content'
+import logo from './assets/cmmc-logo.png'
 
 class App extends Component {
 
@@ -40,6 +41,9 @@ class App extends Component {
     return (
       <div className="container">
         <div className="row" style={{marginTop: 20}}>
+          <div className="col-12 col-md-12">
+            <img src={logo} style={{height: 40, marginBottom: 20}} alt=""/>
+          </div>
           <Filter connection={this.state.connection}/>
           <Connection/>
           <Content hiddenDiv={this.state.hiddenDiv}/>

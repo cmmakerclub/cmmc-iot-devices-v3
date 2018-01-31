@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Dispatcher from '../flux/Dispatcher'
 import TypeActions from '../flux/Constants'
-import logo from '../assets/cmmc-logo.png'
 import store from '../flux/Store'
 import './styles.css'
 
@@ -37,12 +36,12 @@ export default class Connection extends Component {
     })
   }
 
-  handleOnDisconnect = (e) => {
-    e.preventDefault()
-    Dispatcher.dispatch({
-      type: TypeActions.MQTT_DISCONNECT
-    })
-  }
+  // handleOnDisconnect = (e) => {
+  //   e.preventDefault()
+  //   Dispatcher.dispatch({
+  //     type: TypeActions.MQTT_DISCONNECT
+  //   })
+  // }
 
   render () {
 
@@ -50,25 +49,21 @@ export default class Connection extends Component {
     const hiddenWhenConnectingSuccess = this.state.connection ? 'none' : 'block'
 
     return (
-      <div className="col-12 col-md-3">
+      <div className={hiddenWhenConnectingFail && 'col-12 col-md-3'} style={{display: hiddenWhenConnectingSuccess}}>
         <div className="form-group">
           <div className="card">
             <div className="card-body">
-
               <form>
-                <div className="form-group">
-                  <img src={logo} style={{height: 30}} alt=""/>
-                </div>
                 <h6 className='text-right' style={{color: '#2c6cf0'}}>
                   {this.state.connection ? 'Connection' : 'Waiting for connection'}&ensp;
                   <i className={this.state.connection ? 'fa fa-circle text-success' : 'fa fa-circle text-danger'}/>
                 </h6>
 
-                <div className="form-group" style={{display: hiddenWhenConnectingFail}}>
-                  <button type='button' className='btn btn-danger' style={{width: '100%'}}
-                          onClick={e => this.handleOnDisconnect(e)}>Disconnect
-                  </button>
-                </div>
+                {/*<div className="form-group" style={{display: hiddenWhenConnectingFail}}>*/}
+                  {/*<button type='button' className='btn btn-danger' style={{width: '100%'}}*/}
+                          {/*onClick={e => this.handleOnDisconnect(e)}>Disconnect*/}
+                  {/*</button>*/}
+                {/*</div>*/}
 
                 <div className={this.state.connection ? 'fadeOut' : 'fadeIn'}>
 
