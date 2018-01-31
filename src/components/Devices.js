@@ -36,57 +36,21 @@ export default class Devices extends Component {
     store.addListener(() => {
 
       if (store.state.connection) {
-        let storeData = store.state.messageArrived
-        let listDevices = []
-        let stateDevices = this.state.devices
+        this.storeData = store.state.messageArrived
+        this.storeFilterDevices = store.state.filterDevices
+        this.listDevices = []
+        this.stateDevices = this.state.devices
 
-        Object.keys(storeData).forEach((myName, idx) => {
-          if (stateDevices[idx] !== undefined) {
-            if (storeData[myName].d.timestamp > stateDevices[idx].d.timestamp) {
-
-              storeData[myName].classUpdate = 'text-danger'
-              storeData[myName].classCardHeader = 'card-header bg-success'
-
-              if (this.state.currentDevice === myName) {
-
-                initWeightTable(storeData[myName].info, storeData[myName].d)
-
-                let tableInfoContent = []
-                let tableDataContent = []
-
-                Object.keys(storeData[myName].info).forEach((key) => {
-                  tableInfoContent.push(
-                    <tr key={uuid()}>
-                      <td>{key}</td>
-                      <td>{storeData[myName].info[key]}</td>
-                    </tr>
-                  )
-                })
-
-                Object.keys(storeData[myName].d).forEach((key) => {
-                  tableDataContent.push(
-                    <tr key={uuid()}>
-                      <td>{key}</td>
-                      <td>{storeData[myName].d[key]}</td>
-                    </tr>
-                  )
-                })
-
-                this.setState({
-                  tableInfoContent: tableInfoContent,
-                  tableDataContent: tableDataContent
-                })
-
-              }
-
-            }
-          }
-          listDevices.push(storeData[myName])
-        })
+        if (this.storeFilterDevices.length === 0) {
+          this.renderDevices(this.storeData)
+        } else {
+          this.renderDevices(this.storeFilterDevices)
+        }
 
         this.setState({
-          devices: listDevices
+          devices: this.listDevices
         })
+
       } else {
 
         this.setState({
@@ -99,6 +63,52 @@ export default class Devices extends Component {
     })
 
     Modal.setAppElement('#root')
+  }
+
+  renderDevices = (store) => {
+    Object.keys(store).forEach((myName, idx) => {
+      if (this.stateDevices[idx] !== undefined) {
+        if (store[myName].d.timestamp > this.stateDevices[idx].d.timestamp) {
+
+          store[myName].classUpdate = 'text-danger'
+          store[myName].classCardHeader = 'card-header bg-success'
+
+          if (this.state.currentDevice === myName) {
+
+            initWeightTable(store[myName].info, store[myName].d)
+
+            let tableInfoContent = []
+            let tableDataContent = []
+
+            Object.keys(store[myName].info).forEach((key) => {
+              tableInfoContent.push(
+                <tr key={uuid()}>
+                  <td>{key}</td>
+                  <td>{store[myName].info[key]}</td>
+                </tr>
+              )
+            })
+
+            Object.keys(store[myName].d).forEach((key) => {
+              tableDataContent.push(
+                <tr key={uuid()}>
+                  <td>{key}</td>
+                  <td>{store[myName].d[key]}</td>
+                </tr>
+              )
+            })
+
+            this.setState({
+              tableInfoContent: tableInfoContent,
+              tableDataContent: tableDataContent
+            })
+
+          }
+
+        }
+      }
+      this.listDevices.push(store[myName])
+    })
   }
 
   componentWillMount () {
@@ -232,7 +242,6 @@ export default class Devices extends Component {
                   style={styles.customStyle}
                   contentLabel="Modal"
                 >
-
                   <div className='row'>
                     <div className="col-12 col-md-6 text-center">
                       <table className='table table-bordered'>
@@ -255,8 +264,7 @@ export default class Devices extends Component {
                       </table>
                     </div>
                   </div>
-
-                  <button className='btn btn-danger float-right' onClick={this.closeModal}>Close</button>
+                  <button type='button' className='btn btn-danger float-right' onClick={this.closeModal}>Close</button>
                 </Modal>
               </div>
             </div>

@@ -9,6 +9,7 @@ class MyStore extends Store {
     super(props)
     this.state = {
       messageArrived: [],
+      filterDevices: [],
       connection: false,
       mqtt: {
         host: '',
@@ -56,8 +57,17 @@ class MyStore extends Store {
       this.__emitChange()
     }
 
-    if (action.type === ActionTypes.MQTT_CLEAR_RETAIN) {
-      MQTT_ClearRetain(this.state.mqtt.topic)
+    if (action.type === ActionTypes.MQTT_FILTER_DEVICES_NAME) {
+      const search = action.data
+      let filterDevices = []
+      Object.keys(this.state.messageArrived).map(key => {
+        let matchingKey = key.indexOf(search) !== -1
+        if (matchingKey) {
+          filterDevices.push(this.state.messageArrived[key])
+        }
+      })
+      this.state.filterDevices = filterDevices
+      console.log(action.data)
       this.__emitChange()
     }
 
