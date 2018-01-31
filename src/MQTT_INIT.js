@@ -48,6 +48,10 @@ const MQTT_Connect = (init) => {
           })
         } else {
           data.classCardHeader = 'card-header bg-success'
+          Dispatcher.dispatch({
+            type: TypeActions.DEVICES_ONLINE,
+            data: JSON.parse(message.toString())
+          })
         }
 
         Dispatcher.dispatch({

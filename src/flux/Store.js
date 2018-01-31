@@ -3,6 +3,9 @@ import AppDispatcher from './Dispatcher'
 import ActionTypes from './Constants'
 import { MQTT_Connect, MQTT_Disconnect } from '../MQTT_INIT.js'
 
+let moment = require('moment-timezone')
+moment.locale('th')
+
 class MyStore extends Store {
 
   constructor (props) {
@@ -86,10 +89,20 @@ class MyStore extends Store {
       this.state.checkedOffline = action.data
     }
 
+    if (action.type === ActionTypes.DEVICES_ONLINE) {
+      let myName = action.data.d.myName
+      let data = action.data
+      data.d.timestamp = moment.now()
+      data.classCardHeader = 'card-header bg-success'
+      this.state.devicesOnline[myName] = data
+    }
+
     if (action.type === ActionTypes.DEVICES_OFFLINE) {
       let myName = action.data.d.myName
-      this.state.devicesOffline[myName] = action.data
-      console.log('devices offline : ', this.state.devicesOffline)
+      let data = action.data
+      data.d.timestamp = moment.now()
+      data.classCardHeader = 'card-header bg-secondary'
+      this.state.devicesOffline[myName] = data
     }
 
   }

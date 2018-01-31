@@ -43,10 +43,22 @@ export default class Devices extends Component {
         this.listDevices = []
         this.stateDevices = this.state.devices
 
-        if (this.storeFilterDevices.length === 0) {
-          this.renderDevices(this.storeData)
+        let checkedOnline = store.state.checkedOnline
+        let checkedOffline = store.state.checkedOffline
+
+        if (checkedOnline === false && checkedOffline === false) {
+          if (this.storeFilterDevices.length === 0) {
+            this.renderDevices(this.storeData)
+          } else {
+            this.renderDevices(this.storeFilterDevices)
+          }
         } else {
-          this.renderDevices(this.storeFilterDevices)
+          if (checkedOffline) {
+            this.renderDevices(store.state.devicesOffline)
+          }
+          if (checkedOnline) {
+            this.renderDevices(store.state.devicesOnline)
+          }
         }
 
       } else {
@@ -117,7 +129,7 @@ export default class Devices extends Component {
         d[idx].classUpdate = 'text-primary'
 
         let diff = moment.now() - d[idx].d.timestamp
-        if (diff > (60000 * 5)) {
+        if (diff > (60000)) {
           d[idx].classCardHeader = 'card-header bg-secondary'
           Dispatcher.dispatch({
             type: TypeActions.DEVICES_OFFLINE,
