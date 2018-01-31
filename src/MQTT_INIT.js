@@ -1,6 +1,7 @@
 import mqtt from 'mqtt'
 import Dispatcher from './flux/Dispatcher'
 import TypeActions from './flux/Constants'
+import _ from 'underscore'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -35,18 +36,11 @@ const MQTT_Connect = (init) => {
 
   client.on('message', function (topic, message, packet) {
 
-    let messageIncome = JSON.parse(message.toString())
+    try {
 
-    if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
-      // if (packet.retain === false) {
-      //   let data = {
-          // destinationName: packet.topic,
-          // payloadString: packet.payload.toString(),
-          // qos: packet.qos,
-          // timestamp: moment().format('DD/MM/YYYY HH:mm:ss'),
-          // unix: moment.now(),
-          // retained: packet.retain
-        // }
+      let messageIncome = JSON.parse(message.toString())
+      console.log(messageIncome)
+      if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
 
         let data = JSON.parse(message.toString())
         data.d.timestamp = moment.now()
@@ -61,7 +55,10 @@ const MQTT_Connect = (init) => {
           type: TypeActions.MQTT_MESSAGE_ARRIVED,
           data: data
         })
-      // }
+      }
+
+    } catch (e) {
+      console.log(e)
     }
 
   })
