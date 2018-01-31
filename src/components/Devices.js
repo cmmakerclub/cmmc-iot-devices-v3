@@ -47,10 +47,6 @@ export default class Devices extends Component {
           this.renderDevices(this.storeFilterDevices)
         }
 
-        this.setState({
-          devices: this.listDevices
-        })
-
       } else {
 
         this.setState({
@@ -109,6 +105,7 @@ export default class Devices extends Component {
       }
       this.listDevices.push(store[myName])
     })
+    this.setState({devices: this.listDevices})
   }
 
   componentWillMount () {

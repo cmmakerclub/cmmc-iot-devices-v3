@@ -58,16 +58,19 @@ class MyStore extends Store {
     }
 
     if (action.type === ActionTypes.MQTT_FILTER_DEVICES_NAME) {
-      const search = action.data
-      let filterDevices = []
-      Object.keys(this.state.messageArrived).map(key => {
-        let matchingKey = key.indexOf(search) !== -1
-        if (matchingKey) {
-          filterDevices.push(this.state.messageArrived[key])
-        }
-      })
-      this.state.filterDevices = filterDevices
-      console.log(action.data)
+      if (action.data) {
+        const search = action.data
+        let filterDevices = []
+        Object.keys(this.state.messageArrived).map(key => {
+          let matchingKey = key.indexOf(search) !== -1
+          if (matchingKey) {
+            filterDevices.push(this.state.messageArrived[key])
+          }
+        })
+        this.state.filterDevices = filterDevices
+      } else {
+        this.state.filterDevices = []
+      }
       this.__emitChange()
     }
 
