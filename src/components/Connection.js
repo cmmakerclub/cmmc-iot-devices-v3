@@ -91,13 +91,15 @@ export default class Connection extends Component {
                     Username
                     <input type="text" className='form-control'
                            onChange={e => this.setState({username: e.target.value})}
-                           disabled={this.state.disableField}/>
+                           disabled={this.state.disableField}
+                           autoComplete="current-username"/>
                   </div>
                   <div className="form-group">
                     Password
                     <input type="password" className='form-control'
                            onChange={e => this.setState({password: e.target.value})}
-                           disabled={this.state.disableField}/>
+                           disabled={this.state.disableField}
+                           autoComplete="current-password"/>
                   </div>
                   <div className="form-group">
                     Topic

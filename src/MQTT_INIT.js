@@ -1,7 +1,6 @@
 import mqtt from 'mqtt'
 import Dispatcher from './flux/Dispatcher'
 import TypeActions from './flux/Constants'
-import _ from 'underscore'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -10,12 +9,10 @@ window.MQTTGlobal = ''
 
 const MQTT_Connect = (init) => {
 
-  console.log(init)
-
   let options = {
     clientId: init.clientId,
     clean: true,
-    port: parseInt(init.port)
+    port: parseInt(init.port, 0)
   }
 
   if (init.username || init.password) {
@@ -37,9 +34,7 @@ const MQTT_Connect = (init) => {
   client.on('message', function (topic, message, packet) {
 
     try {
-
       let messageIncome = JSON.parse(message.toString())
-      console.log(messageIncome)
       if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
 
         let data = JSON.parse(message.toString())
@@ -47,6 +42,10 @@ const MQTT_Connect = (init) => {
 
         if (packet.retain) {
           data.classCardHeader = 'card-header bg-secondary'
+          Dispatcher.dispatch({
+            type: TypeActions.DEVICES_OFFLINE,
+            data: JSON.parse(message.toString())
+          })
         } else {
           data.classCardHeader = 'card-header bg-success'
         }
@@ -56,7 +55,6 @@ const MQTT_Connect = (init) => {
           data: data
         })
       }
-
     } catch (e) {
       console.log(e)
     }
@@ -65,16 +63,11 @@ const MQTT_Connect = (init) => {
 
 }
 
-const MQTT_ClearRetain = (topic) => {
-  window.MQTTGlobal.publish(topic, null, {retain: true})
-}
-
 const MQTT_Disconnect = () => {
   window.MQTTGlobal.end()
 }
 
 export {
   MQTT_Connect,
-  MQTT_ClearRetain,
   MQTT_Disconnect
 }

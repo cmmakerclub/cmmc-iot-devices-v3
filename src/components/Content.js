@@ -4,10 +4,6 @@ import Devices from './Devices'
 
 export default class Content extends Component {
 
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     return (
       <div className='col-12 col-md-9'>

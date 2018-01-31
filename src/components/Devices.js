@@ -4,6 +4,8 @@ import store from '../flux/Store'
 import uuid from 'uuid'
 import Modal from 'react-modal'
 import { initWeightTable } from './Weight.config'
+import TypeActions from '../flux/Constants'
+import Dispatcher from '../flux/Dispatcher'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -110,13 +112,17 @@ export default class Devices extends Component {
 
   componentWillMount () {
     setInterval(() => {
-      this.state.devices.map((device, idx) => {
+      this.state.devices.forEach((device, idx) => {
         let d = this.state.devices
         d[idx].classUpdate = 'text-primary'
 
         let diff = moment.now() - d[idx].d.timestamp
         if (diff > (60000 * 5)) {
           d[idx].classCardHeader = 'card-header bg-secondary'
+          Dispatcher.dispatch({
+            type: TypeActions.DEVICES_OFFLINE,
+            data: d[idx]
+          })
         }
 
         this.setState({devices: d})

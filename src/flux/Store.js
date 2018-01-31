@@ -1,7 +1,7 @@
 import { Store } from 'flux/utils'
 import AppDispatcher from './Dispatcher'
 import ActionTypes from './Constants'
-import { MQTT_Connect, MQTT_ClearRetain, MQTT_Disconnect } from '../MQTT_INIT.js'
+import { MQTT_Connect, MQTT_Disconnect } from '../MQTT_INIT.js'
 
 class MyStore extends Store {
 
@@ -10,6 +10,10 @@ class MyStore extends Store {
     this.state = {
       messageArrived: [],
       filterDevices: [],
+      devicesOnline: [],
+      devicesOffline: [],
+      checkedOnline: false,
+      checkedOffline: false,
       connection: false,
       mqtt: {
         host: '',
@@ -61,7 +65,7 @@ class MyStore extends Store {
       if (action.data) {
         const search = action.data
         let filterDevices = []
-        Object.keys(this.state.messageArrived).map(key => {
+        Object.keys(this.state.messageArrived).forEach(key => {
           let matchingKey = key.indexOf(search) !== -1
           if (matchingKey) {
             filterDevices.push(this.state.messageArrived[key])
@@ -72,6 +76,20 @@ class MyStore extends Store {
         this.state.filterDevices = []
       }
       this.__emitChange()
+    }
+
+    if (action.type === ActionTypes.CHECKED_ONLINE) {
+      this.state.checkedOnline = action.data
+    }
+
+    if (action.type === ActionTypes.CHECKED_OFFLINE) {
+      this.state.checkedOffline = action.data
+    }
+
+    if (action.type === ActionTypes.DEVICES_OFFLINE) {
+      let myName = action.data.d.myName
+      this.state.devicesOffline[myName] = action.data
+      console.log('devices offline : ', this.state.devicesOffline)
     }
 
   }
