@@ -18,6 +18,7 @@ class MyStore extends Store {
       checkedOnline: false,
       checkedOffline: false,
       connection: false,
+      lwt: [],
       mqtt: {
         host: '',
         port: '',
@@ -48,6 +49,9 @@ class MyStore extends Store {
       MQTT_Disconnect()
       this.state.connection = false
       this.messageArrived = []
+      this.filterDevices = []
+      this.devicesOnline = []
+      this.devicesOffline = []
       this.__emitChange()
     }
 
@@ -103,6 +107,11 @@ class MyStore extends Store {
       data.d.timestamp = moment.now()
       data.classCardHeader = 'card-header bg-secondary'
       this.state.devicesOffline[myName] = data
+    }
+
+    if (action.type === ActionTypes.LWT) {
+      this.state.lwt[action.data.id] = action.data
+      console.log(this.state.lwt)
     }
 
   }

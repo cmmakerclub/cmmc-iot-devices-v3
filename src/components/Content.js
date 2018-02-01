@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import loading from '../assets/loading-2.gif'
 import Devices from './Devices'
+// import DevicesTest from './DevicesTest'
 
 export default class Content extends Component {
 

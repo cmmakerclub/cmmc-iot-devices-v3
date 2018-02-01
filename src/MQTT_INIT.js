@@ -24,6 +24,7 @@ const MQTT_Connect = (init) => {
 
   client.on('connect', function () {
     client.subscribe(init.topic)
+    client.subscribe('CMMC/+/lwt')
     window.MQTTGlobal = client
     Dispatcher.dispatch({
       type: TypeActions.MQTT_CONNECTION_SUCCESS,
@@ -35,8 +36,15 @@ const MQTT_Connect = (init) => {
 
     try {
       let messageIncome = JSON.parse(message.toString())
-      if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
 
+      if (messageIncome.status !== undefined && messageIncome.id !== undefined) { // lwt check
+        Dispatcher.dispatch({
+          type: TypeActions.LWT,
+          data: JSON.parse(message.toString())
+        })
+      }
+
+      if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
         let data = JSON.parse(message.toString())
         data.d.timestamp = moment.now()
 
@@ -59,8 +67,9 @@ const MQTT_Connect = (init) => {
           data: data
         })
       }
+
     } catch (e) {
-      console.log(e)
+      // console.log(e)
     }
 
   })
@@ -71,7 +80,12 @@ const MQTT_Disconnect = () => {
   window.MQTTGlobal.end()
 }
 
+const MQTT_Publish = (topic, value) => {
+  window.MQTTGlobal.publish(topic, value)
+}
+
 export {
   MQTT_Connect,
-  MQTT_Disconnect
+  MQTT_Disconnect,
+  MQTT_Publish
 }
