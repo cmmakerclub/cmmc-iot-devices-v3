@@ -104,7 +104,7 @@ class MyStore extends Store {
     if (action.type === ActionTypes.DEVICES_OFFLINE) {
       let myName = action.data.d.myName
       let data = action.data
-      data.d.timestamp = moment.now()
+      // data.d.timestamp = moment.now()
       data.classCardHeader = 'card-header bg-secondary'
       this.state.devicesOffline[myName] = data
     }

@@ -151,6 +151,10 @@ export default class Devices extends Component {
             })
           } else {
             d[idx].classCardHeader = 'card-header bg-success'
+            Dispatcher.dispatch({
+              type: TypeActions.DEVICES_ONLINE,
+              data: d[idx]
+            })
           }
         }
 
