@@ -53,7 +53,7 @@ export default class Devices extends Component {
 
         if (checkedOnline === false && checkedOffline === false) {
           if (this.storeFilterDevices.length === 0) {
-            this.renderDevices(this.storeData)
+            this.renderDevices(this.storeData, store.state.specificUpdate)
           } else {
             this.renderDevices(this.storeFilterDevices)
           }
@@ -80,7 +80,8 @@ export default class Devices extends Component {
     Modal.setAppElement('#root')
   }
 
-  renderDevices = (store) => {
+  renderDevices = (store, specificUpdate) => {
+
     Object.keys(store).forEach((myName, idx) => {
       if (this.stateDevices[idx] !== undefined) {
         if (store[myName].d.timestamp > this.stateDevices[idx].d.timestamp) {
@@ -120,49 +121,112 @@ export default class Devices extends Component {
 
           }
 
+          setTimeout(() => {
+            store[myName].classUpdate = 'text-primary'
+          }, 1000)
+
         }
       }
       this.listDevices.push(store[myName])
     })
     this.setState({devices: this.listDevices})
+
+    // if (specificUpdate !== '') {
+    //
+    //   Object.keys(store).forEach((myName) => {
+    //     if (myName === specificUpdate) {
+    //       store[myName].classUpdate = 'text-danger'
+    //
+    //       if (this.state.currentDevice === myName) {
+    //         initWeightTable(store[myName].info, store[myName].d)
+    //
+    //         let tableInfoContent = []
+    //         let tableDataContent = []
+    //
+    //         Object.keys(store[myName].info).forEach((key) => {
+    //           tableInfoContent.push(
+    //             <tr key={uuid()}>
+    //               <td>{key}</td>
+    //               <td>{store[myName].info[key]}</td>
+    //             </tr>
+    //           )
+    //         })
+    //
+    //         Object.keys(store[myName].d).forEach((key) => {
+    //           tableDataContent.push(
+    //             <tr key={uuid()}>
+    //               <td>{key}</td>
+    //               <td>{store[myName].d[key]}</td>
+    //             </tr>
+    //           )
+    //         })
+    //
+    //         this.setState({
+    //           tableInfoContent: tableInfoContent,
+    //           tableDataContent: tableDataContent
+    //         })
+    //
+    //         this.state.devices.forEach((value, idx) => {
+    //           if (value.d.myName === store[myName].d.myName) {
+    //             let specificUpdate = Object.assign(this.state.devices[idx], store[myName])
+    //             let bufferDevices = this.state.devices
+    //             bufferDevices[idx] = specificUpdate
+    //             this.setState({devices: bufferDevices})
+    //
+    //             setTimeout(() => {
+    //               store[myName].classUpdate = 'text-primary'
+    //               specificUpdate = Object.assign(this.state.devices[idx], store[myName])
+    //               bufferDevices = this.state.devices
+    //               bufferDevices[idx] = specificUpdate
+    //               this.setState({devices: bufferDevices})
+    //             }, 1000)
+    //
+    //             // console.log('update only : ', this.state.devices[idx])
+    //           }
+    //         })
+    //       }
+    //     }
+    //   })
+    //
+    // }
+
   }
 
-  componentWillMount () {
-    setInterval(() => {
-      this.state.devices.forEach((device, idx) => {
-        let d = this.state.devices
-        let lwt = this.state.lwt
-
-        d[idx].classUpdate = 'text-primary'
-
-        if (lwt[d[idx].info.id].status === 0) {
-          d[idx].classCardHeader = 'card-header bg-secondary'
-          Dispatcher.dispatch({
-            type: TypeActions.DEVICES_OFFLINE,
-            data: d[idx]
-          })
-        } else {
-          let diff = moment.now() - d[idx].d.timestamp
-          if (diff > (60000 * 5)) {
-            d[idx].classCardHeader = 'card-header bg-secondary'
-            Dispatcher.dispatch({
-              type: TypeActions.DEVICES_OFFLINE,
-              data: d[idx]
-            })
-          } else {
-            d[idx].classCardHeader = 'card-header bg-success'
-            Dispatcher.dispatch({
-              type: TypeActions.DEVICES_ONLINE,
-              data: d[idx]
-            })
-          }
-        }
-
-        this.setState({devices: d})
-      })
-      // console.log(this.state.devices)
-    }, 1000)
-  }
+// componentWillMount () {
+//   setInterval(() => {
+//     this.state.devices.forEach((device, idx) => {
+//       let d = this.state.devices
+//       let lwt = this.state.lwt
+//
+//       d[idx].classUpdate = 'text-primary'
+//
+//       if (lwt[d[idx].info.id].status === 0) {
+//         d[idx].classCardHeader = 'card-header bg-secondary'
+//         Dispatcher.dispatch({
+//           type: TypeActions.DEVICES_OFFLINE,
+//           data: d[idx]
+//         })
+//       } else {
+//         let diff = moment.now() - d[idx].d.timestamp
+//         if (diff > (60000 * 5)) {
+//           d[idx].classCardHeader = 'card-header bg-secondary'
+//           Dispatcher.dispatch({
+//             type: TypeActions.DEVICES_OFFLINE,
+//             data: d[idx]
+//           })
+//         } else {
+//           d[idx].classCardHeader = 'card-header bg-success'
+//           Dispatcher.dispatch({
+//             type: TypeActions.DEVICES_ONLINE,
+//             data: d[idx]
+//           })
+//         }
+//       }
+//
+//       this.setState({devices: d})
+//     })
+//   }, 1000)
+// }
 
   openModal = () => {
     this.setState({modalIsOpen: true})
@@ -216,12 +280,12 @@ export default class Devices extends Component {
     this.openModal()
   }
 
-  publish = (topic, value) => {
-
-    console.log('topic : ', topic)
-
-    MQTT_Publish(topic, value)
-  }
+// publish = (topic, value) => {
+//
+//   console.log('topic : ', topic)
+//
+//   MQTT_Publish(topic, value)
+// }
 
   render () {
 
@@ -331,7 +395,12 @@ export default class Devices extends Component {
 
     return (
       <div id='myDevices' className='row'>
-        {this.state.devices.map(obj => <Component key={uuid()} data={obj}/>)}
+        {
+          this.state.devices.map(obj => {
+            // console.log('id : ', obj.info.id + ' name : ', obj.d.myName)
+            return <Component key={obj.info.id} data={obj}/>
+          })
+        }
       </div>
     )
   }

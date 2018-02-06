@@ -19,6 +19,7 @@ class MyStore extends Store {
       checkedOffline: false,
       connection: false,
       lwt: [],
+      specificUpdate: '',
       mqtt: {
         host: '',
         port: '',
@@ -62,8 +63,21 @@ class MyStore extends Store {
 
     if (action.type === ActionTypes.MQTT_MESSAGE_ARRIVED) {
       let d = action.data.d
+      let info = action.data.info
       let messageArrived = this.state.messageArrived
-      messageArrived[d.myName] = action.data
+      let dataOffline = action.data
+      if (this.state.lwt[info.id].status === 0) {
+        dataOffline.status = 0
+      }
+
+      if (messageArrived[d.myName] === undefined) {
+        messageArrived[d.myName] = dataOffline
+      } else {
+        messageArrived[d.myName] = dataOffline
+        this.state.specificUpdate = d.myName
+        // console.log('update : ' + d.myName)
+      }
+
       this.state.messageArrived = messageArrived
       this.__emitChange()
     }
@@ -111,7 +125,7 @@ class MyStore extends Store {
 
     if (action.type === ActionTypes.LWT) {
       this.state.lwt[action.data.id] = action.data
-      console.log(this.state.lwt)
+      // console.log(action.data)
     }
 
   }
