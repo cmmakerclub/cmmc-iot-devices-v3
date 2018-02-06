@@ -68,11 +68,13 @@ class MyStore extends Store {
       let dataOffline = action.data
       if (this.state.lwt[info.id].status === 0) {
         dataOffline.status = 0
+        dataOffline.classCardHeader = 'card-header bg-secondary'
       }
 
       if (messageArrived[d.myName] === undefined) {
         messageArrived[d.myName] = dataOffline
       } else {
+        dataOffline.classCardHeader = 'card-header bg-success'
         messageArrived[d.myName] = dataOffline
         this.state.specificUpdate = d.myName
         // console.log('update : ' + d.myName)

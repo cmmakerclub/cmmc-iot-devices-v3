@@ -192,42 +192,6 @@ export default class Devices extends Component {
 
   }
 
-// componentWillMount () {
-//   setInterval(() => {
-//     this.state.devices.forEach((device, idx) => {
-//       let d = this.state.devices
-//       let lwt = this.state.lwt
-//
-//       d[idx].classUpdate = 'text-primary'
-//
-//       if (lwt[d[idx].info.id].status === 0) {
-//         d[idx].classCardHeader = 'card-header bg-secondary'
-//         Dispatcher.dispatch({
-//           type: TypeActions.DEVICES_OFFLINE,
-//           data: d[idx]
-//         })
-//       } else {
-//         let diff = moment.now() - d[idx].d.timestamp
-//         if (diff > (60000 * 5)) {
-//           d[idx].classCardHeader = 'card-header bg-secondary'
-//           Dispatcher.dispatch({
-//             type: TypeActions.DEVICES_OFFLINE,
-//             data: d[idx]
-//           })
-//         } else {
-//           d[idx].classCardHeader = 'card-header bg-success'
-//           Dispatcher.dispatch({
-//             type: TypeActions.DEVICES_ONLINE,
-//             data: d[idx]
-//           })
-//         }
-//       }
-//
-//       this.setState({devices: d})
-//     })
-//   }, 1000)
-// }
-
   openModal = () => {
     this.setState({modalIsOpen: true})
   }
