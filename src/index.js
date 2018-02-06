@@ -9,7 +9,4 @@ import 'popper.js/dist/umd/popper.min'
 import 'bootstrap/dist/js/bootstrap.min'
 import './App.css'
 
-// import registerServiceWorker from './registerServiceWorker';
-
 ReactDOM.render(<App />, document.getElementById('root'));
-// registerServiceWorker();
