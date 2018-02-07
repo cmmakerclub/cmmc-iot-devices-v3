@@ -19,46 +19,11 @@ export default class App extends Component {
 
     this.store.subscribe(() => {
 
-      if (this.getState.connection) {
-
-        if (Object.keys(this.getState.devices).length === 0) {
-          this.setState({hiddenDiv: 'block'})
-        } else {
-          this.setState({hiddenDiv: 'none'})
-        }
-
-        // let storeData = this.getState.devices
-        // let devices = []
-        //
-        // Object.keys(storeData).forEach((myName) => {
-        //   devices.push(storeData[myName])
-        // })
-        //
-        // this.setState({
-        //   devices: devices
-        // })
+      if (Object.keys(this.getState.devices).length === 0) {
+        this.setState({hiddenDiv: 'block'})
+      } else {
+        this.setState({hiddenDiv: 'none'})
       }
-
-      // store.addListener(() => {
-      //   let storeData = store.state.messageArrived
-      //   let devices = []
-      //
-      //   Object.keys(storeData).forEach((myName) => {
-      //     devices.push(storeData[myName])
-      //   })
-      //
-      //   this.setState({
-      //     messages: devices,
-      //     connection: store.state.connection
-      //   })
-      //
-      //   if (this.state.connection && this.state.messages.length === 0) {
-      //     this.setState({hiddenDiv: 'block'})
-      //   } else {
-      //     this.setState({hiddenDiv: 'none'})
-      //   }
-      //
-      // })
 
     })
   }

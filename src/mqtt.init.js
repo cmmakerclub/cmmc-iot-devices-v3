@@ -1,6 +1,4 @@
 import mqtt from 'mqtt'
-// import Dispatcher from './flux/Dispatcher'
-// import TypeActions from './flux/Constants'
 import TypeActions from './redux/constants'
 import store from './redux/store'
 import ActionTypes from './flux/Constants'

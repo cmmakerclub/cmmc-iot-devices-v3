@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-// import store from '../flux/Store'
+// import ReactDOM from 'react-dom'
 import uuid from 'uuid'
 import Modal from 'react-modal'
 import { initWeightTable } from './Weight.config'
-// import TypeActions from '../flux/Constants'
-// import Dispatcher from '../flux/Dispatcher'
-import { MQTT_Publish } from '../MQTT_INIT'
+// import { MQTT_Publish } from '../MQTT_INIT'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -302,16 +299,16 @@ export default class Devices extends Component {
                           onClick={this.closeModal}>
                     Close
                   </button>
-                  <button type='button' className='btn btn-warning float-right' style={{color: 'white', marginRight: 5}}
-                          onClick={() => this.publish(`${info.prefix}${info.id}/$/command`, 'OFF')}>
-                    <i className='fa fa-power-off'/>&nbsp;
-                    OFF
-                  </button>
-                  <button type='button' className='btn btn-success float-right' style={{marginRight: 5}}
-                          onClick={() => this.publish(`${info.prefix}${info.id}/$/command`, 'ON')}>
-                    <i className='fa fa-power-off'/>&nbsp;
-                    ON
-                  </button>
+                  {/*<button type='button' className='btn btn-warning float-right' style={{color: 'white', marginRight: 5}}*/}
+                          {/*onClick={() => this.publish(`${info.prefix}${info.id}/$/command`, 'OFF')}>*/}
+                    {/*<i className='fa fa-power-off'/>&nbsp;*/}
+                    {/*OFF*/}
+                  {/*</button>*/}
+                  {/*<button type='button' className='btn btn-success float-right' style={{marginRight: 5}}*/}
+                          {/*onClick={() => this.publish(`${info.prefix}${info.id}/$/command`, 'ON')}>*/}
+                    {/*<i className='fa fa-power-off'/>&nbsp;*/}
+                    {/*ON*/}
+                  {/*</button>*/}
                 </Modal>
               </div>
             </div>
