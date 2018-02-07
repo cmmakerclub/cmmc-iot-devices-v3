@@ -10,7 +10,8 @@ export default class App extends Component {
     super(props)
 
     this.state = {
-      hiddenDiv: 'none'
+      hiddenDiv: 'none',
+      devices: []
     }
 
     this.store = this.props.store
@@ -18,63 +19,48 @@ export default class App extends Component {
 
     this.store.subscribe(() => {
 
-      // console.log('subscribe ', this.getState.messageArrived)
-
-      console.log(this.getState)
-
       if (this.getState.connection) {
 
-        // if (this.props.devices.length === 0) {
-        //   this.setState({hiddenDiv: 'block'})
-        // } else {
-        //   this.setState({hiddenDiv: 'none'})
-        // }
-        //
-        // let storeData = this.getState.messageArrived
+        if (Object.keys(this.getState.devices).length === 0) {
+          this.setState({hiddenDiv: 'block'})
+        } else {
+          this.setState({hiddenDiv: 'none'})
+        }
+
+        // let storeData = this.getState.devices
         // let devices = []
         //
         // Object.keys(storeData).forEach((myName) => {
         //   devices.push(storeData[myName])
         // })
         //
-        // this.props.devices = devices
-
-        // console.log(this.getState.messageArrived)
-
         // this.setState({
-        //   messages: devices,
-        //   connection: store.state.connection
+        //   devices: devices
         // })
-        //
-        // if (this.state.connection && this.state.messages.length === 0) {
-        //   this.setState({hiddenDiv: 'block'})
-        // } else {
-        //   this.setState({hiddenDiv: 'none'})
-        // }
       }
+
+      // store.addListener(() => {
+      //   let storeData = store.state.messageArrived
+      //   let devices = []
+      //
+      //   Object.keys(storeData).forEach((myName) => {
+      //     devices.push(storeData[myName])
+      //   })
+      //
+      //   this.setState({
+      //     messages: devices,
+      //     connection: store.state.connection
+      //   })
+      //
+      //   if (this.state.connection && this.state.messages.length === 0) {
+      //     this.setState({hiddenDiv: 'block'})
+      //   } else {
+      //     this.setState({hiddenDiv: 'none'})
+      //   }
+      //
+      // })
+
     })
-
-    // store.addListener(() => {
-    //   let storeData = store.state.messageArrived
-    //   let devices = []
-    //
-    //   Object.keys(storeData).forEach((myName) => {
-    //     devices.push(storeData[myName])
-    //   })
-    //
-    //   this.setState({
-    //     messages: devices,
-    //     connection: store.state.connection
-    //   })
-    //
-    //   if (this.state.connection && this.state.messages.length === 0) {
-    //     this.setState({hiddenDiv: 'block'})
-    //   } else {
-    //     this.setState({hiddenDiv: 'none'})
-    //   }
-    //
-    // })
-
   }
 
   render () {
@@ -86,7 +72,7 @@ export default class App extends Component {
           </div>
           <Filter connection={this.state.connection}/>
           <Connection store={this.props.store}/>
-          <Content hiddenDiv={this.state.hiddenDiv}/>
+          <Content store={this.store} hiddenDiv={this.state.hiddenDiv}/>
         </div>
       </div>
     )

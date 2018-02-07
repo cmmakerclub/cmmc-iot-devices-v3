@@ -5,7 +5,8 @@ let moment = require('moment-timezone')
 moment.locale('th')
 
 let initialState = {
-  messageArrived: [],
+  devices: [],
+  arrayDevices: [],
   filterDevices: [],
   devicesOnline: [],
   devicesOffline: [],
@@ -46,34 +47,31 @@ export default (state = initialState, action) => {
       break
 
     case TypeActions.MQTT_CONNECTION_SUCCESS:
-      // console.log('connection should be true')
       state.connection = true
       break
 
     case TypeActions.MQTT_MESSAGE_ARRIVED:
+      let d = action.data.d
+      let info = action.data.info
+      let devices = state.devices
+      let dataOffline = action.data
+      if (state.lwt[`id-${info.id}`].status === 0) {
+        dataOffline.classCardHeader = 'card-header bg-secondary'
+      }
 
-      // console.log(action.data)
-      // let d = action.data.d
-      // let info = action.data.info
-      // let messageArrived = state.messageArrived
-      // let dataOffline = action.data
-      // if (state.lwt[info.id].status === 0) {
-      //   dataOffline.status = 0
-      //   dataOffline.classCardHeader = 'card-header bg-secondary'
-      // }
-      //
-      // if (messageArrived[d.myName] === undefined) {
-      //   messageArrived[d.myName] = dataOffline
-      // } else {
-      //   dataOffline.classCardHeader = 'card-header bg-success'
-      //   messageArrived[d.myName] = dataOffline
-      //   state.specificUpdate = d.myName
-      // }
-      //
-      // console.log(messageArrived)
+      if (devices[d.myName] === undefined) {
+        devices[d.myName] = dataOffline
+      } else {
+        dataOffline.classCardHeader = 'card-header bg-success'
+        devices[d.myName] = dataOffline
+        state.specificUpdate = d.myName
+      }
 
-      // return state.messageArrived = messageArrived
-
+      let bufferArrayDevices = []
+      Object.keys(devices).forEach(key => {
+        bufferArrayDevices.push(devices[key])
+      })
+      state.arrayDevices = bufferArrayDevices
       break
 
     case TypeActions.MQTT_FILTER_DEVICES_NAME:
@@ -101,7 +99,7 @@ export default (state = initialState, action) => {
       return {...state, devicesOffline: [action.data.d.myName] = action.data}
 
     case TypeActions.LWT:
-
+      state.lwt[`id-${action.data.id}`] = action.data
       break
 
     default:

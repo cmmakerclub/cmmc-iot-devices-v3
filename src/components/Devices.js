@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import store from '../flux/Store'
+// import store from '../flux/Store'
 import uuid from 'uuid'
 import Modal from 'react-modal'
 import { initWeightTable } from './Weight.config'
-import TypeActions from '../flux/Constants'
-import Dispatcher from '../flux/Dispatcher'
+// import TypeActions from '../flux/Constants'
+// import Dispatcher from '../flux/Dispatcher'
 import { MQTT_Publish } from '../MQTT_INIT'
 
 let moment = require('moment-timezone')
@@ -37,45 +37,8 @@ export default class Devices extends Component {
       ]
     }
 
-    store.addListener(() => {
-
-      if (store.state.connection) {
-
-        this.setState({lwt: store.state.lwt})
-
-        this.storeData = store.state.messageArrived
-        this.storeFilterDevices = store.state.filterDevices
-        this.listDevices = []
-        this.stateDevices = this.state.devices
-
-        let checkedOnline = store.state.checkedOnline
-        let checkedOffline = store.state.checkedOffline
-
-        if (checkedOnline === false && checkedOffline === false) {
-          if (this.storeFilterDevices.length === 0) {
-            this.renderDevices(this.storeData, store.state.specificUpdate)
-          } else {
-            this.renderDevices(this.storeFilterDevices)
-          }
-        } else {
-          if (checkedOffline) {
-            this.renderDevices(store.state.devicesOffline)
-          }
-          if (checkedOnline) {
-            this.renderDevices(store.state.devicesOnline)
-          }
-        }
-
-      } else {
-
-        this.setState({
-          devices: []
-        })
-
-        ReactDOM.render(<div></div>, document.getElementById('myDevices'))
-      }
-
-    })
+    this.store = this.props.store
+    this.getState = this.props.store.getState()
 
     Modal.setAppElement('#root')
   }
@@ -360,8 +323,7 @@ export default class Devices extends Component {
     return (
       <div id='myDevices' className='row'>
         {
-          this.state.devices.map(obj => {
-            // console.log('id : ', obj.info.id + ' name : ', obj.d.myName)
+          this.getState.arrayDevices.map(obj => {
             return <Component key={obj.info.id} data={obj}/>
           })
         }

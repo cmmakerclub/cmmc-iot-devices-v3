@@ -39,18 +39,19 @@ const MQTT_Connect = (init) => {
     try {
       let messageIncome = JSON.parse(message.toString())
 
-      // console.log(messageIncome)
+      if (messageIncome.status !== undefined && messageIncome.id !== undefined) { // lwt check
+        store.dispatch({
+          type: TypeActions.LWT,
+          data: messageIncome
+        })
+      }
 
-      // if (messageIncome.status !== undefined && messageIncome.id !== undefined) { // lwt check
-      //   Dispatcher.dispatch({
-      //     type: TypeActions.LWT,
-      //     data: JSON.parse(message.toString())
-      //   })
-      // }
-      //
       if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
         messageIncome.d.timestamp = moment.now()
-
+        store.dispatch({
+          type: TypeActions.MQTT_MESSAGE_ARRIVED,
+          data: messageIncome
+        })
         if (packet.retain) {
           messageIncome.classCardHeader = 'card-header bg-secondary'
           store.dispatch({
@@ -64,11 +65,6 @@ const MQTT_Connect = (init) => {
             data: JSON.parse(message.toString())
           })
         }
-
-        store.dispatch({
-          type: TypeActions.MQTT_MESSAGE_ARRIVED,
-          data: messageIncome
-        })
       }
 
     } catch (e) {

@@ -12,7 +12,7 @@ export default class Content extends Component {
           <div style={{display: this.props.hiddenDiv}} className='text-right'>
             Please wait a few minute&ensp;<img src={loading} style={{width: 30}} alt=""/>
           </div>
-          <Devices/>
+          <Devices store={this.props.store}/>
         </div>
       </div>
     )
