@@ -67,11 +67,15 @@ export default (state = initialState, action) => {
         state.specificUpdate = d.myName
       }
 
-      let bufferArrayDevices = []
-      Object.keys(devices).forEach(key => {
-        bufferArrayDevices.push(devices[key])
+      Object.keys(devices).forEach((key, idx) => {
+        if (state.arrayDevices[idx] === undefined) {
+          state.arrayDevices[idx] = devices[key]
+        } else {
+          if (key === d.myName) {
+            state.arrayDevices[idx] = devices[key]
+          }
+        }
       })
-      state.arrayDevices = bufferArrayDevices
       break
 
     case TypeActions.MQTT_FILTER_DEVICES_NAME:

@@ -12,204 +12,9 @@ export default class Devices extends Component {
 
   constructor (props) {
     super(props)
-
-    this.state = {
-      devices: [],
-      lwt: [],
-      modalIsOpen: false,
-      tableInfoContent: [],
-      tableDataContent: [],
-      currentDevice: '',
-      tableHeaderFirst: [
-        <tr key={uuid()}>
-          <th>DataKey</th>
-          <th>Value</th>
-        </tr>
-      ],
-      tableHeaderSecond: [
-        <tr key={uuid()}>
-          <th>InfoKey</th>
-          <th>Value</th>
-        </tr>
-      ]
-    }
-
     this.store = this.props.store
     this.getState = this.props.store.getState()
-
-    Modal.setAppElement('#root')
   }
-
-  renderDevices = (store, specificUpdate) => {
-
-    Object.keys(store).forEach((myName, idx) => {
-      if (this.stateDevices[idx] !== undefined) {
-        if (store[myName].d.timestamp > this.stateDevices[idx].d.timestamp) {
-
-          store[myName].classUpdate = 'text-danger'
-          // store[myName].classCardHeader = 'card-header bg-success'
-
-          if (this.state.currentDevice === myName) {
-
-            initWeightTable(store[myName].info, store[myName].d)
-
-            let tableInfoContent = []
-            let tableDataContent = []
-
-            Object.keys(store[myName].info).forEach((key) => {
-              tableInfoContent.push(
-                <tr key={uuid()}>
-                  <td>{key}</td>
-                  <td>{store[myName].info[key]}</td>
-                </tr>
-              )
-            })
-
-            Object.keys(store[myName].d).forEach((key) => {
-              tableDataContent.push(
-                <tr key={uuid()}>
-                  <td>{key}</td>
-                  <td>{store[myName].d[key]}</td>
-                </tr>
-              )
-            })
-
-            this.setState({
-              tableInfoContent: tableInfoContent,
-              tableDataContent: tableDataContent
-            })
-
-          }
-
-          setTimeout(() => {
-            store[myName].classUpdate = 'text-primary'
-          }, 1000)
-
-        }
-      }
-      this.listDevices.push(store[myName])
-    })
-    this.setState({devices: this.listDevices})
-
-    // if (specificUpdate !== '') {
-    //
-    //   Object.keys(store).forEach((myName) => {
-    //     if (myName === specificUpdate) {
-    //       store[myName].classUpdate = 'text-danger'
-    //
-    //       if (this.state.currentDevice === myName) {
-    //         initWeightTable(store[myName].info, store[myName].d)
-    //
-    //         let tableInfoContent = []
-    //         let tableDataContent = []
-    //
-    //         Object.keys(store[myName].info).forEach((key) => {
-    //           tableInfoContent.push(
-    //             <tr key={uuid()}>
-    //               <td>{key}</td>
-    //               <td>{store[myName].info[key]}</td>
-    //             </tr>
-    //           )
-    //         })
-    //
-    //         Object.keys(store[myName].d).forEach((key) => {
-    //           tableDataContent.push(
-    //             <tr key={uuid()}>
-    //               <td>{key}</td>
-    //               <td>{store[myName].d[key]}</td>
-    //             </tr>
-    //           )
-    //         })
-    //
-    //         this.setState({
-    //           tableInfoContent: tableInfoContent,
-    //           tableDataContent: tableDataContent
-    //         })
-    //
-    //         this.state.devices.forEach((value, idx) => {
-    //           if (value.d.myName === store[myName].d.myName) {
-    //             let specificUpdate = Object.assign(this.state.devices[idx], store[myName])
-    //             let bufferDevices = this.state.devices
-    //             bufferDevices[idx] = specificUpdate
-    //             this.setState({devices: bufferDevices})
-    //
-    //             setTimeout(() => {
-    //               store[myName].classUpdate = 'text-primary'
-    //               specificUpdate = Object.assign(this.state.devices[idx], store[myName])
-    //               bufferDevices = this.state.devices
-    //               bufferDevices[idx] = specificUpdate
-    //               this.setState({devices: bufferDevices})
-    //             }, 1000)
-    //
-    //             // console.log('update only : ', this.state.devices[idx])
-    //           }
-    //         })
-    //       }
-    //     }
-    //   })
-    //
-    // }
-
-  }
-
-  openModal = () => {
-    this.setState({modalIsOpen: true})
-  }
-
-  closeModal = () => {
-    this.setState({modalIsOpen: false})
-  }
-
-  handleClickInfo = (e, info, d) => {
-    e.preventDefault()
-
-    this.setState({weightTable: initWeightTable(info, d)})
-
-    let tableInfoContent = []
-    let tableDataContent = []
-
-    Object.keys(info).forEach((key) => {
-      tableInfoContent.push(
-        <tr key={uuid()}>
-          <td>{key}</td>
-          <td>{info[key]}</td>
-        </tr>
-      )
-    })
-
-    Object.keys(d).forEach((key) => {
-      tableDataContent.push(
-        <tr key={uuid()}>
-          <td>{key}</td>
-          <td>{d[key]}</td>
-        </tr>
-      )
-    })
-
-    let resultWeight = initWeightTable(info, d)
-
-    if (resultWeight) {
-      this.setState({
-        tableHeaderFirst: [resultWeight[0]],
-        tableHeaderSecond: [resultWeight[1]]
-      })
-    }
-
-    this.setState({
-      tableInfoContent: tableInfoContent,
-      tableDataContent: tableDataContent,
-      currentDevice: d.myName
-    })
-
-    this.openModal()
-  }
-
-// publish = (topic, value) => {
-//
-//   console.log('topic : ', topic)
-//
-//   MQTT_Publish(topic, value)
-// }
 
   render () {
 
@@ -217,35 +22,6 @@ export default class Devices extends Component {
 
       let d = props.data.d
       let info = props.data.info
-
-      const styles = {
-        content: {marginBottom: 5},
-        footer: {marginBottom: 0},
-        customStyle: {
-          overlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.75)'
-          },
-          content: {
-            position: 'absolute',
-            top: '40px',
-            left: '40px',
-            right: '40px',
-            bottom: '40px',
-            border: '1px solid #ccc',
-            background: '#fff',
-            overflow: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            borderRadius: '4px',
-            outline: 'none',
-            padding: '20px'
-          }
-        }
-      }
 
       return (
         <div className="col-12 col-md-3">
@@ -264,52 +40,9 @@ export default class Devices extends Component {
                   <i className='fa fa-clock-o'/>&ensp;
                   {moment(d.timestamp).fromNow()}
                 </p>
-                <button className='btn btn-primary' style={{width: '100%'}}
-                        onClick={(e) => this.handleClickInfo(e, info, d)}>
+                <button className='btn btn-primary' style={{width: '100%'}}>
                   MORE INFO
                 </button>
-                <Modal
-                  isOpen={this.state.modalIsOpen}
-                  style={styles.customStyle}
-                  contentLabel="Modal"
-                >
-                  <div className='row'>
-                    <div className="col-12 col-md-6 text-center">
-                      <table className='table table-bordered'>
-                        <thead>
-                        {this.state.tableHeaderFirst.map(header => header)}
-                        </thead>
-                        <tbody>
-                        {this.state.tableInfoContent.map(d => d)}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="col-12 col-md-6 text-center">
-                      <table className='table table-bordered'>
-                        <thead>
-                        {this.state.tableHeaderSecond.map(header => header)}
-                        </thead>
-                        <tbody>
-                        {this.state.tableDataContent.map(d => d)}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <button type='button' className='btn btn-danger float-right' style={{marginRight: 5}}
-                          onClick={this.closeModal}>
-                    Close
-                  </button>
-                  {/*<button type='button' className='btn btn-warning float-right' style={{color: 'white', marginRight: 5}}*/}
-                          {/*onClick={() => this.publish(`${info.prefix}${info.id}/$/command`, 'OFF')}>*/}
-                    {/*<i className='fa fa-power-off'/>&nbsp;*/}
-                    {/*OFF*/}
-                  {/*</button>*/}
-                  {/*<button type='button' className='btn btn-success float-right' style={{marginRight: 5}}*/}
-                          {/*onClick={() => this.publish(`${info.prefix}${info.id}/$/command`, 'ON')}>*/}
-                    {/*<i className='fa fa-power-off'/>&nbsp;*/}
-                    {/*ON*/}
-                  {/*</button>*/}
-                </Modal>
               </div>
             </div>
           </div>
@@ -320,9 +53,7 @@ export default class Devices extends Component {
     return (
       <div id='myDevices' className='row'>
         {
-          this.getState.arrayDevices.map(obj => {
-            return <Component key={obj.info.id} data={obj}/>
-          })
+          this.getState.arrayDevices.map(obj => <Component key={obj.d.myName} data={obj}/>)
         }
       </div>
     )
