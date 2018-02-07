@@ -1,47 +1,46 @@
 import React, { Component } from 'react'
-import Dispatcher from '../flux/Dispatcher'
-import TypeActions from '../flux/Constants'
-import store from '../flux/Store'
+import TypeActions from '../redux/constants'
 import './styles.css'
+import { MQTT_Connect } from '../mqtt.init'
 
-export default class Connection extends Component {
+class Connection extends Component {
 
   constructor (props) {
     super(props)
     this.state = {
-      host: 'mqtt.cmmc.io',
-      port: 9001,
-      clientId: 'CMMC_' + Math.random().toString(16).substr(2, 8),
-      username: '',
-      password: '',
-      topic: 'CMMC/#',
+      mqtt: {
+        host: 'mqtt.cmmc.io',
+        port: 9001,
+        clientId: 'CMMC_' + Math.random().toString(16).substr(2, 8),
+        username: '',
+        password: '',
+        topic: 'CMMC/#'
+      },
       hiddenConnection: '',
       connection: false,
       disableField: false
     }
 
-    store.addListener(() => {
-      this.setState({
-        connection: store.state.connection
-      })
-      store.state.connection ? this.setState({disableField: true}) : this.setState({disableField: false})
+    this.store = this.props.store
+    console.log('connection component', this.props)
+
+    this.store.subscribe(() => {
+      if (this.store.getState().connection) {
+        this.setState({connection: true, disableField: true})
+      } else {
+        this.setState({connection: false, disableField: false})
+      }
     })
   }
 
   handleOnConnect = (e) => {
     e.preventDefault()
-    Dispatcher.dispatch({
+    this.store.dispatch({
       type: TypeActions.MQTT_CONNECT,
-      data: this.state
+      data: this.state.mqtt
     })
+    MQTT_Connect(this.state.mqtt)
   }
-
-  // handleOnDisconnect = (e) => {
-  //   e.preventDefault()
-  //   Dispatcher.dispatch({
-  //     type: TypeActions.MQTT_DISCONNECT
-  //   })
-  // }
 
   render () {
 
@@ -60,9 +59,9 @@ export default class Connection extends Component {
                 </h6>
 
                 {/*<div className="form-group" style={{display: hiddenWhenConnectingFail}}>*/}
-                  {/*<button type='button' className='btn btn-danger' style={{width: '100%'}}*/}
-                          {/*onClick={e => this.handleOnDisconnect(e)}>Disconnect*/}
-                  {/*</button>*/}
+                {/*<button type='button' className='btn btn-danger' style={{width: '100%'}}*/}
+                {/*onClick={e => this.handleOnDisconnect(e)}>Disconnect*/}
+                {/*</button>*/}
                 {/*</div>*/}
 
                 <div className={this.state.connection ? 'fadeOut' : 'fadeIn'}>
@@ -98,7 +97,7 @@ export default class Connection extends Component {
                   </div>
                   <div className="form-group">
                     Topic
-                    <input type="text" className='form-control' defaultValue={this.state.topic}
+                    <input type="text" className='form-control' defaultValue={this.state.mqtt.topic}
                            onChange={e => this.setState({topic: e.target.value})} disabled={this.state.disableField}/>
                   </div>
                   <div className="form-group" style={{display: hiddenWhenConnectingSuccess}}>
@@ -119,3 +118,7 @@ export default class Connection extends Component {
   }
 
 }
+
+// export default connect((store) => store)(Connection)
+
+export default Connection

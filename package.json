@@ -16,8 +16,10 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.2.0",
     "react-modal": "^3.1.11",
+    "react-redux": "^5.0.6",
     "react-scripts": "1.1.0",
     "react-transition-group": "^2.2.1",
+    "redux": "^3.7.2",
     "underscore": "^1.8.3",
     "uuid": "^3.2.1"
   },
