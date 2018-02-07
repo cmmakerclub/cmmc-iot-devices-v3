@@ -47,29 +47,34 @@ const MQTT_Connect = (init) => {
       //   })
       // }
       //
-      // if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
-      //   let data = JSON.parse(message.toString())
-      //   data.d.timestamp = moment.now()
-      //
-      //   if (packet.retain) {
-      //     data.classCardHeader = 'card-header bg-secondary'
-      //     Dispatcher.dispatch({
-      //       type: TypeActions.DEVICES_OFFLINE,
-      //       data: JSON.parse(message.toString())
-      //     })
-      //   } else {
-      //     data.classCardHeader = 'card-header bg-success'
-      //     Dispatcher.dispatch({
-      //       type: TypeActions.DEVICES_ONLINE,
-      //       data: JSON.parse(message.toString())
-      //     })
-      //   }
-      //
-      //   Dispatcher.dispatch({
-      //     type: TypeActions.MQTT_MESSAGE_ARRIVED,
-      //     data: data
-      //   })
-      // }
+      if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
+        // let data = JSON.parse(message.toString())
+        // data.d.timestamp = moment.now()
+        //
+        // if (packet.retain) {
+        //   data.classCardHeader = 'card-header bg-secondary'
+        //   Dispatcher.dispatch({
+        //     type: TypeActions.DEVICES_OFFLINE,
+        //     data: JSON.parse(message.toString())
+        //   })
+        // } else {
+        //   data.classCardHeader = 'card-header bg-success'
+        //   Dispatcher.dispatch({
+        //     type: TypeActions.DEVICES_ONLINE,
+        //     data: JSON.parse(message.toString())
+        //   })
+        // }
+
+        store.dispatch({
+          type: TypeActions.MQTT_MESSAGE_ARRIVED,
+          data: messageIncome
+        })
+
+        // Dispatcher.dispatch({
+        //   type: TypeActions.MQTT_MESSAGE_ARRIVED,
+        //   data: data
+        // })
+      }
 
     } catch (e) {
       // console.log(e)

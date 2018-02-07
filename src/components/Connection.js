@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import TypeActions from '../redux/constants'
 import { MQTT_Connect } from '../mqtt.init'
 import classNames from 'classnames'
-import {connect} from 'react-redux'
 
-class Connection extends Component {
+export default class Connection extends Component {
 
   constructor (props) {
     super(props)
@@ -21,18 +20,17 @@ class Connection extends Component {
     }
 
     this.store = this.props.store
-  }
+    this.getState = this.props.store.getState()
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.connection !== undefined) {
-      this.setState({connection: nextProps.connection})
-    }
+    this.store.subscribe(() => {
+      this.setState({connection: this.getState.connection})
+    })
   }
 
   handleOnConnect = (e) => {
     e.preventDefault()
     this.store.dispatch({
-      type: TypeActions.MQTT_CONNECT,
+      type: TypeActions.MQTT_CONFIG,
       data: this.state.mqtt
     })
     MQTT_Connect(this.state.mqtt)
@@ -108,11 +106,3 @@ class Connection extends Component {
   }
 
 }
-
-const mapStateToProps = (state => {
-  return {
-    connection: state.connection
-  }
-})
-
-export default connect(mapStateToProps)(Connection)

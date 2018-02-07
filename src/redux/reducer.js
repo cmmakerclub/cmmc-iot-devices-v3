@@ -45,10 +45,29 @@ export default (state = initialState, action) => {
       break
 
     case TypeActions.MQTT_CONNECTION_SUCCESS:
-      return {connection: true}
+      return state.connection = true
 
     case TypeActions.MQTT_MESSAGE_ARRIVED:
 
+      // console.log(action.data)
+      // let d = action.data.d
+      // let info = action.data.info
+      // let messageArrived = this.state.messageArrived
+      // let dataOffline = action.data
+      // if (this.state.lwt[info.id].status === 0) {
+      //   dataOffline.status = 0
+      //   dataOffline.classCardHeader = 'card-header bg-secondary'
+      // }
+      //
+      // if (messageArrived[d.myName] === undefined) {
+      //   messageArrived[d.myName] = dataOffline
+      // } else {
+      //   dataOffline.classCardHeader = 'card-header bg-success'
+      //   messageArrived[d.myName] = dataOffline
+      //   state.specificUpdate = d.myName
+      // }
+      //
+      // return {messageArrived: messageArrived}
       break
 
     case TypeActions.MQTT_FILTER_DEVICES_NAME:

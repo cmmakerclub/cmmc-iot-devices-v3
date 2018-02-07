@@ -1,20 +1,56 @@
 import React, { Component } from 'react'
 import Connection from './components/Connection.js'
-// import store from './flux/Store'
 import Filter from './components/Filter'
 import Content from './components/Content'
 import logo from './assets/cmmc-logo.png'
 
-class App extends Component {
+export default class App extends Component {
 
   constructor (props) {
     super(props)
 
     this.state = {
-      messages: [],
-      connection: false,
       hiddenDiv: 'none'
     }
+
+    this.store = this.props.store
+    this.getState = this.props.store.getState()
+
+    this.store.subscribe(() => {
+
+      // console.log('subscribe ', this.getState.messageArrived)
+
+      if (this.getState.connection) {
+
+        // if (this.props.devices.length === 0) {
+        //   this.setState({hiddenDiv: 'block'})
+        // } else {
+        //   this.setState({hiddenDiv: 'none'})
+        // }
+        //
+        // let storeData = this.getState.messageArrived
+        // let devices = []
+        //
+        // Object.keys(storeData).forEach((myName) => {
+        //   devices.push(storeData[myName])
+        // })
+        //
+        // this.props.devices = devices
+
+        // console.log(this.getState.messageArrived)
+
+        // this.setState({
+        //   messages: devices,
+        //   connection: store.state.connection
+        // })
+        //
+        // if (this.state.connection && this.state.messages.length === 0) {
+        //   this.setState({hiddenDiv: 'block'})
+        // } else {
+        //   this.setState({hiddenDiv: 'none'})
+        // }
+      }
+    })
 
     // store.addListener(() => {
     //   let storeData = store.state.messageArrived
@@ -36,6 +72,7 @@ class App extends Component {
     //   }
     //
     // })
+
   }
 
   render () {
@@ -53,5 +90,3 @@ class App extends Component {
     )
   }
 }
-
-export default App
