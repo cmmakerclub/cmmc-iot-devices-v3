@@ -3,6 +3,7 @@ import mqtt from 'mqtt'
 // import TypeActions from './flux/Constants'
 import TypeActions from './redux/constants'
 import store from './redux/store'
+import ActionTypes from './flux/Constants'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -48,36 +49,30 @@ const MQTT_Connect = (init) => {
       // }
       //
       if (messageIncome.d !== undefined && messageIncome.info !== undefined) {
-        // let data = JSON.parse(message.toString())
-        // data.d.timestamp = moment.now()
-        //
-        // if (packet.retain) {
-        //   data.classCardHeader = 'card-header bg-secondary'
-        //   Dispatcher.dispatch({
-        //     type: TypeActions.DEVICES_OFFLINE,
-        //     data: JSON.parse(message.toString())
-        //   })
-        // } else {
-        //   data.classCardHeader = 'card-header bg-success'
-        //   Dispatcher.dispatch({
-        //     type: TypeActions.DEVICES_ONLINE,
-        //     data: JSON.parse(message.toString())
-        //   })
-        // }
+        messageIncome.d.timestamp = moment.now()
+
+        if (packet.retain) {
+          messageIncome.classCardHeader = 'card-header bg-secondary'
+          store.dispatch({
+            type: ActionTypes.DEVICES_OFFLINE,
+            data: messageIncome
+          })
+        } else {
+          messageIncome.classCardHeader = 'card-header bg-success'
+          store.dispatch({
+            type: ActionTypes.DEVICES_ONLINE,
+            data: JSON.parse(message.toString())
+          })
+        }
 
         store.dispatch({
           type: TypeActions.MQTT_MESSAGE_ARRIVED,
           data: messageIncome
         })
-
-        // Dispatcher.dispatch({
-        //   type: TypeActions.MQTT_MESSAGE_ARRIVED,
-        //   data: data
-        // })
       }
 
     } catch (e) {
-      // console.log(e)
+
     }
 
   })

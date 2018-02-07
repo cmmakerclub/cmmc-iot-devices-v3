@@ -23,8 +23,15 @@ export default class Connection extends Component {
     this.getState = this.props.store.getState()
 
     this.store.subscribe(() => {
-      this.setState({connection: this.getState.connection})
+      if (this.getState.connection && this.state.connection === false) {
+        // console.log('set state connection')
+        this.setState({connection: this.getState.connection})
+      }
     })
+  }
+
+  componentWillUnmount() {
+    console.log('Connection willUnmount')
   }
 
   handleOnConnect = (e) => {

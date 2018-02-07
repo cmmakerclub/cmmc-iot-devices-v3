@@ -30,6 +30,7 @@ export default (state = initialState, action) => {
 
     case TypeActions.MQTT_CONNECT :
       return {
+        ...state,
         mqtt: {
           host: action.data.host,
           port: action.data.port,
@@ -45,16 +46,18 @@ export default (state = initialState, action) => {
       break
 
     case TypeActions.MQTT_CONNECTION_SUCCESS:
-      return state.connection = true
+      // console.log('connection should be true')
+      state.connection = true
+      break
 
     case TypeActions.MQTT_MESSAGE_ARRIVED:
 
       // console.log(action.data)
       // let d = action.data.d
       // let info = action.data.info
-      // let messageArrived = this.state.messageArrived
+      // let messageArrived = state.messageArrived
       // let dataOffline = action.data
-      // if (this.state.lwt[info.id].status === 0) {
+      // if (state.lwt[info.id].status === 0) {
       //   dataOffline.status = 0
       //   dataOffline.classCardHeader = 'card-header bg-secondary'
       // }
@@ -67,7 +70,10 @@ export default (state = initialState, action) => {
       //   state.specificUpdate = d.myName
       // }
       //
-      // return {messageArrived: messageArrived}
+      // console.log(messageArrived)
+
+      // return state.messageArrived = messageArrived
+
       break
 
     case TypeActions.MQTT_FILTER_DEVICES_NAME:
@@ -83,12 +89,16 @@ export default (state = initialState, action) => {
       break
 
     case TypeActions.DEVICES_ONLINE:
-
-      break
+      if (state.devicesOnline[action.data.d.myName] === undefined) {
+        state.devicesOnline[action.data.d.myName] = action.data
+      }
+      return {...state, devicesOnline: [action.data.d.myName] = action.data}
 
     case TypeActions.DEVICES_OFFLINE:
-
-      break
+      if (state.devicesOffline[action.data.d.myName] === undefined) {
+        state.devicesOffline[action.data.d.myName] = action.data
+      }
+      return {...state, devicesOffline: [action.data.d.myName] = action.data}
 
     case TypeActions.LWT:
 

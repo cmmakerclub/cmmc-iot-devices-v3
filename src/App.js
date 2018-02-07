@@ -20,6 +20,8 @@ export default class App extends Component {
 
       // console.log('subscribe ', this.getState.messageArrived)
 
+      console.log(this.getState)
+
       if (this.getState.connection) {
 
         // if (this.props.devices.length === 0) {
