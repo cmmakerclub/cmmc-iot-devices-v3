@@ -72,7 +72,14 @@ export default (state = initialState, action) => {
           state.arrayDevices[idx] = devices[key]
         } else {
           if (key === d.myName) {
+            console.log('update only ', key)
+            devices[key].classUpdate = 'text-danger'
             state.arrayDevices[idx] = devices[key]
+
+            setTimeout(() => {
+              devices[key].classUpdate = 'text-primary'
+              state.arrayDevices[idx] = devices[key]
+            }, 2000)
           }
         }
       })
