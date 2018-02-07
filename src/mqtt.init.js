@@ -38,7 +38,7 @@ const MQTT_Connect = (init) => {
     try {
       let messageIncome = JSON.parse(message.toString())
 
-      console.log(messageIncome)
+      // console.log(messageIncome)
 
       // if (messageIncome.status !== undefined && messageIncome.id !== undefined) { // lwt check
       //   Dispatcher.dispatch({

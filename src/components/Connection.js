@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import TypeActions from '../redux/constants'
-import './styles.css'
 import { MQTT_Connect } from '../mqtt.init'
+import classNames from 'classnames'
+import {connect} from 'react-redux'
 
 class Connection extends Component {
 
@@ -16,21 +17,16 @@ class Connection extends Component {
         password: '',
         topic: 'CMMC/#'
       },
-      hiddenConnection: '',
-      connection: false,
-      disableField: false
+      connection: false
     }
 
     this.store = this.props.store
-    console.log('connection component', this.props)
+  }
 
-    this.store.subscribe(() => {
-      if (this.store.getState().connection) {
-        this.setState({connection: true, disableField: true})
-      } else {
-        this.setState({connection: false, disableField: false})
-      }
-    })
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.connection !== undefined) {
+      this.setState({connection: nextProps.connection})
+    }
   }
 
   handleOnConnect = (e) => {
@@ -44,69 +40,63 @@ class Connection extends Component {
 
   render () {
 
-    const hiddenWhenConnectingFail = !this.state.connection ? 'none' : 'block'
-    const hiddenWhenConnectingSuccess = this.state.connection ? 'none' : 'block'
+    let classConnectionSuccess = classNames({
+      none: this.state.connection === true,
+      block: this.state.connection === false
+    })
+
+    let classWaitingConnection = classNames({
+      'col-12 col-md-3': this.state.connection === false
+    })
 
     return (
-      <div className={hiddenWhenConnectingFail && 'col-12 col-md-3'} style={{display: hiddenWhenConnectingSuccess}}>
+      <div className={classWaitingConnection} style={{display: classConnectionSuccess}}>
         <div className="form-group">
           <div className="card">
             <div className="card-body">
               <form>
                 <h6 className='text-right' style={{color: '#2c6cf0'}}>
-                  {this.state.connection ? 'Connection' : 'Waiting for connection'}&ensp;
-                  <i className={this.state.connection ? 'fa fa-circle text-success' : 'fa fa-circle text-danger'}/>
+                  Waiting for connection&ensp;
+                  <i className='fa fa-circle text-danger'/>
                 </h6>
 
-                {/*<div className="form-group" style={{display: hiddenWhenConnectingFail}}>*/}
-                {/*<button type='button' className='btn btn-danger' style={{width: '100%'}}*/}
-                {/*onClick={e => this.handleOnDisconnect(e)}>Disconnect*/}
-                {/*</button>*/}
-                {/*</div>*/}
-
-                <div className={this.state.connection ? 'fadeOut' : 'fadeIn'}>
-
-                  <div className="form-group">
-                    Host
-                    <input type="text" className='form-control' defaultValue={'mqtt.cmmc.io'}
-                           onChange={e => this.setState({host: e.target.value})} disabled={this.state.disableField}/>
-                  </div>
-                  <div className="form-group">
-                    Port
-                    <input type="text" className='form-control' defaultValue={9001}
-                           onChange={e => this.setState({port: e.target.value})} disabled={this.state.disableField}/>
-                  </div>
-                  <div className="form-group">
-                    ClientID
-                    <input type="text" className='form-control' defaultValue={this.state.clientId}
-                           disabled={this.state.disableField}/>
-                  </div>
-                  <div className="form-group">
-                    Username
-                    <input type="text" className='form-control'
-                           onChange={e => this.setState({username: e.target.value})}
-                           disabled={this.state.disableField}
-                           autoComplete="current-username"/>
-                  </div>
-                  <div className="form-group">
-                    Password
-                    <input type="password" className='form-control'
-                           onChange={e => this.setState({password: e.target.value})}
-                           disabled={this.state.disableField}
-                           autoComplete="current-password"/>
-                  </div>
-                  <div className="form-group">
-                    Topic
-                    <input type="text" className='form-control' defaultValue={this.state.mqtt.topic}
-                           onChange={e => this.setState({topic: e.target.value})} disabled={this.state.disableField}/>
-                  </div>
-                  <div className="form-group" style={{display: hiddenWhenConnectingSuccess}}>
-                    <button type='button' className='btn btn-success' style={{width: '100%'}}
-                            onClick={e => this.handleOnConnect(e)}>
-                      <i className='fa fa-globe'/> Connect
-                    </button>
-                  </div>
-
+                <div className="form-group">
+                  Host
+                  <input type="text" className='form-control' defaultValue={'mqtt.cmmc.io'}
+                         onChange={e => this.setState({host: e.target.value})}/>
+                </div>
+                <div className="form-group">
+                  Port
+                  <input type="text" className='form-control' defaultValue={9001}
+                         onChange={e => this.setState({port: e.target.value})}/>
+                </div>
+                <div className="form-group">
+                  ClientID
+                  <input type="text" className='form-control' defaultValue={this.state.clientId}
+                  />
+                </div>
+                <div className="form-group">
+                  Username
+                  <input type="text" className='form-control'
+                         onChange={e => this.setState({username: e.target.value})}
+                         autoComplete="current-username"/>
+                </div>
+                <div className="form-group">
+                  Password
+                  <input type="password" className='form-control'
+                         onChange={e => this.setState({password: e.target.value})}
+                         autoComplete="current-password"/>
+                </div>
+                <div className="form-group">
+                  Topic
+                  <input type="text" className='form-control' defaultValue={this.state.mqtt.topic}
+                         onChange={e => this.setState({topic: e.target.value})}/>
+                </div>
+                <div className="form-group" style={{display: classConnectionSuccess}}>
+                  <button type='button' className='btn btn-success' style={{width: '100%'}}
+                          onClick={e => this.handleOnConnect(e)}>
+                    <i className='fa fa-globe'/> Connect
+                  </button>
                 </div>
 
               </form>
@@ -119,6 +109,10 @@ class Connection extends Component {
 
 }
 
-// export default connect((store) => store)(Connection)
+const mapStateToProps = (state => {
+  return {
+    connection: state.connection
+  }
+})
 
-export default Connection
+export default connect(mapStateToProps)(Connection)

@@ -1,5 +1,5 @@
 import TypeActions from './constants'
-import { MQTT_Connect, MQTT_Disconnect } from '../MQTT_INIT.js'
+// import { MQTT_Connect, MQTT_Disconnect } from '../MQTT_INIT.js'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -24,7 +24,7 @@ let initialState = {
   }
 }
 
-export default (state, action) => {
+export default (state = initialState, action) => {
 
   switch (action.type) {
 
