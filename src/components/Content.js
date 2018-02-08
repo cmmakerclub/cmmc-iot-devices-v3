@@ -1,9 +1,16 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import loading from '../assets/loading-2.gif'
-import Devices from './Devices'
-// import DevicesTest from './DevicesTest'
+import Device from './Device'
+// import Modal from 'react-modal'
+// import { initWeightTable } from './Weight.config'
 
 export default class Content extends Component {
+
+  constructor (props) {
+    super(props)
+    this.store = this.props.store
+    this.getState = this.store.getState()
+  }
 
   render () {
     return (
@@ -12,7 +19,13 @@ export default class Content extends Component {
           <div style={{display: this.props.hiddenDiv}} className='text-right'>
             Please wait a few minute&ensp;<img src={loading} style={{width: 30}} alt=""/>
           </div>
-          <Devices store={this.props.store}/>
+          <div className='row'>
+            {
+              this.getState.arrayDevices.map(deviceData => {
+                return (<Device key={deviceData.d.myName} data={deviceData}/>)
+              })
+            }
+          </div>
         </div>
       </div>
     )
