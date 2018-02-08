@@ -1,8 +1,4 @@
 import TypeActions from './constants'
-// import { MQTT_Connect, MQTT_Disconnect } from '../MQTT_INIT.js'
-
-let moment = require('moment-timezone')
-moment.locale('th')
 
 let initialState = {
   devices: [],
@@ -15,7 +11,7 @@ let initialState = {
   connection: false,
   lwt: [],
   specificUpdate: '',
-  mqtt: {
+      mqtt: {
     host: '',
     port: '',
     clientId: '',
@@ -25,22 +21,20 @@ let initialState = {
   }
 }
 
-export default (state = initialState, action) => {
+export default function(state = initialState, action) {
 
   switch (action.type) {
 
     case TypeActions.MQTT_CONNECT :
-      return {
-        ...state,
-        mqtt: {
-          host: action.data.host,
-          port: action.data.port,
-          clientId: action.data.clientId,
-          username: action.data.username,
-          password: action.data.password,
-          topic: action.data.topic
-        }
+      state.mqtt = {
+        host: action.data.host,
+        port: action.data.port,
+        clientId: action.data.clientId,
+        username: action.data.username,
+        password: action.data.password,
+        topic: action.data.topic
       }
+      break
 
     case TypeActions.MQTT_DISCONNECT:
 
@@ -72,7 +66,7 @@ export default (state = initialState, action) => {
           state.arrayDevices[idx] = devices[key]
         } else {
           if (key === d.myName) {
-            console.log('update only ', key)
+            // console.log('update only ', key)
             devices[key].classUpdate = 'text-danger'
             state.arrayDevices[idx] = devices[key]
 
@@ -114,6 +108,7 @@ export default (state = initialState, action) => {
       break
 
     default:
+      console.log('default state')
       return state
 
   }
