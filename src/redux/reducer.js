@@ -47,23 +47,46 @@ export default function (state = initialState, action) {
       break
 
     case TypeActions.MQTT_MESSAGE_ARRIVED:
-      let d = action.data.d
-      let info = action.data.info
-      let devices = state.devices
-      let actionData = action.data
-      if (state.lwt[`id-${info.id}`].status === 0) {
-        actionData.classCardHeader = 'card-header bg-secondary'
+      if (state.filterDevices.length === 0) {
+        let d = action.data.d
+        let info = action.data.info
+        let devices = state.devices
+        let actionData = action.data
+
+        if (state.lwt[`id-${info.id}`].status === 0) {
+          actionData.classCardHeader = 'card-header bg-secondary'
+        } else {
+          actionData.classCardHeader = 'card-header bg-success'
+        }
+        devices[d.myName] = actionData
+        Object.keys(devices).forEach((key, idx) => {
+          state.arrayDevices[idx] = devices[key]
+        })
       } else {
-        actionData.classCardHeader = 'card-header bg-success'
+        state.arrayDevices.forEach((device, idx) => {
+          if (device.d.myName === action.data.d.myName) {
+            state.arrayDevices[idx] = action.data
+          }
+        })
       }
-      devices[d.myName] = actionData
-      Object.keys(devices).forEach((key, idx) => {
-        state.arrayDevices[idx] = devices[key]
-      })
       break
 
     case TypeActions.MQTT_FILTER_DEVICES_NAME:
+      if (action.data) {
+        const search = action.data
+        let filterDevices = []
+        Object.keys(state.devices).forEach(key => {
+          let matchingKey = key.indexOf(search) !== -1
+          if (matchingKey) {
+            filterDevices.push(state.devices[key])
+          }
+        })
 
+        state.filterDevices = filterDevices
+        state.arrayDevices = filterDevices
+      } else {
+        state.filterDevices = []
+      }
       break
 
     case TypeActions.CHECKED_ONLINE:

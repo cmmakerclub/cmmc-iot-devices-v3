@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { MQTT_Disconnect, MQTT_Reconnect } from '../mqtt.init'
 import classnames from 'classnames'
+import ActionTypes from '../redux/constants'
 
-export default class Filter extends Component {
+export default class Header extends Component {
 
   constructor (props) {
     super(props)
@@ -13,10 +14,10 @@ export default class Filter extends Component {
 
   handleOnChangeTextFilter = (e) => {
     e.preventDefault()
-    // Dispatcher.dispatch({
-    //   type: TypeActions.MQTT_FILTER_DEVICES_NAME,
-    //   data: e.target.value
-    // })
+    this.store.dispatch({
+      type: ActionTypes.MQTT_FILTER_DEVICES_NAME,
+      data: e.target.value
+    })
   }
 
   handleOnCheckedOnline = (e) => {
