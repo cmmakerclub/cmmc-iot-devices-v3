@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
+import uuid from 'uuid'
 
 const customStyles = {
   content: {
@@ -23,7 +24,8 @@ export default class ModalDevice extends Component {
     super()
 
     this.state = {
-      modalIsOpen: false
+      modalIsOpen: false,
+      dataTable: []
     }
 
     this.openModal = this.openModal.bind(this)
@@ -48,6 +50,38 @@ export default class ModalDevice extends Component {
     this.setState({modalIsOpen: false})
   }
 
+  componentWillReceiveProps (nextProps) {
+    //console.log(nextProps.data)
+
+    let info = nextProps.data.info
+    let d = nextProps.data.d
+
+    let dataTable = []
+    Object.keys(d).forEach((keyData, idxData) => {
+
+      let infoTitle = ''
+      let infoData = ''
+
+      Object.keys(info).forEach((keyInfo, idxInfo) => {
+        if (idxInfo === idxData) {
+          infoTitle = keyInfo
+          infoData = info[keyInfo]
+        }
+      })
+
+      dataTable.push(
+        <tr key={uuid()}>
+          <td>{keyData}</td>
+          <td>{d[keyData]}</td>
+          <td>{infoTitle}</td>
+          <td>{infoData}</td>
+        </tr>
+      )
+    })
+
+    this.setState({dataTable: dataTable})
+  }
+
   render () {
     return (
       <div>
@@ -64,15 +98,15 @@ export default class ModalDevice extends Component {
           <div className="form-group">
             <table className='table table-bordered'>
               <thead>
-                <tr>
-                  <th>DataKey</th>
-                  <th>Value</th>
-                  <th>InfoKey</th>
-                  <th>Value</th>
-                </tr>
+              <tr>
+                <th>DataKey</th>
+                <th>Value</th>
+                <th>InfoKey</th>
+                <th>Value</th>
+              </tr>
               </thead>
               <tbody>
-
+              {this.state.dataTable.map(dataTable => dataTable)}
               </tbody>
             </table>
           </div>

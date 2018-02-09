@@ -55,7 +55,7 @@ class Device extends Component {
 
               <TimeUpdate data={this.data}/>
 
-              <ModalDevice/>
+              <ModalDevice data={this.data}/>
 
             </div>
           </div>
