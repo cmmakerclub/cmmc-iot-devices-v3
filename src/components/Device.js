@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import TimeUpdate from './TimeUpdate'
+import ModalDevice from './ModalDevice'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -32,6 +33,11 @@ class Device extends Component {
     return shouldUpdate
   }
 
+  handleOnClick = (e) => {
+    e.preventDefault()
+    return <ModalDevice />
+  }
+
   render () {
     return (
       <div className="col-12 col-md-3">
@@ -49,9 +55,8 @@ class Device extends Component {
 
               <TimeUpdate data={this.data}/>
 
-              <button className='btn btn-primary' style={{width: '100%'}}>
-                MORE INFO
-              </button>
+              <ModalDevice/>
+
             </div>
           </div>
         </div>
