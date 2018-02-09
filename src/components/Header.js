@@ -59,7 +59,7 @@ export default class Filter extends Component {
 
     let textButton = classnames({
       Disconnect: this.getState.connection === true,
-      Connection: this.getState.connection === false
+      Connect: this.getState.connection === false
     })
 
     return (
