@@ -9,6 +9,7 @@ let initialState = {
   checkedOnline: false,
   checkedOffline: false,
   connection: false,
+  disconnect: false,
   lwt: [],
   mqtt: {
     host: '',
@@ -36,11 +37,13 @@ export default function (state = initialState, action) {
       break
 
     case TypeActions.MQTT_DISCONNECT:
-
+      state.connection = false
+      // console.log('reducer mqtt disconnect')
       break
 
     case TypeActions.MQTT_CONNECTION_SUCCESS:
       state.connection = true
+      state.disconnect = 'connected'
       break
 
     case TypeActions.MQTT_MESSAGE_ARRIVED:

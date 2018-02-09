@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Connection from './components/Connection.js'
-import Filter from './components/Filter'
+import Filter from './components/Header'
 import Content from './components/Content'
 import logo from './assets/cmmc-logo.png'
 
@@ -33,10 +33,12 @@ export default class App extends Component {
       <div className="container">
         <div className="row" style={{marginTop: 20}}>
           <div className="col-12 col-md-12">
-            <img src={logo} style={{height: 40, marginBottom: 20}} alt=""/>
+            <a href="">
+              <img src={logo} style={{height: 40, marginBottom: 20}} alt=""/>
+            </a>
           </div>
-          <Filter connection={this.state.connection}/>
-          <Connection store={this.props.store}/>
+          <Filter store={this.store}/>
+          <Connection store={this.store}/>
           <Content store={this.store} hiddenDiv={this.state.hiddenDiv}/>
         </div>
       </div>

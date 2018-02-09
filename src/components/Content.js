@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import loading from '../assets/loading-2.gif'
 import Device from './Device'
-// import Modal from 'react-modal'
 // import { initWeightTable } from './Weight.config'
 
 export default class Content extends Component {

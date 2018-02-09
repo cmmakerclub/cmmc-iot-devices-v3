@@ -1,7 +1,6 @@
 import mqtt from 'mqtt'
 import TypeActions from './redux/constants'
 import store from './redux/store'
-import ActionTypes from './flux/Constants'
 
 let moment = require('moment-timezone')
 moment.locale('th')
@@ -53,13 +52,13 @@ const MQTT_Connect = (init) => {
         if (packet.retain) {
           messageIncome.classCardHeader = 'card-header bg-secondary'
           store.dispatch({
-            type: ActionTypes.DEVICES_OFFLINE,
+            type: TypeActions.DEVICES_OFFLINE,
             data: messageIncome
           })
         } else {
           messageIncome.classCardHeader = 'card-header bg-success'
           store.dispatch({
-            type: ActionTypes.DEVICES_ONLINE,
+            type: TypeActions.DEVICES_ONLINE,
             data: JSON.parse(message.toString())
           })
         }
@@ -73,8 +72,15 @@ const MQTT_Connect = (init) => {
 
 }
 
+const MQTT_Reconnect = () => {
+  window.MQTTGlobal.reconnect()
+}
+
 const MQTT_Disconnect = () => {
   window.MQTTGlobal.end()
+  store.dispatch({
+    type: TypeActions.MQTT_DISCONNECT
+  })
 }
 
 const MQTT_Publish = (topic, value) => {
@@ -84,5 +90,6 @@ const MQTT_Publish = (topic, value) => {
 export {
   MQTT_Connect,
   MQTT_Disconnect,
+  MQTT_Reconnect,
   MQTT_Publish
 }

@@ -1,42 +1,70 @@
 import React, { Component } from 'react'
-import TypeActions from '../flux/Constants'
-import Dispatcher from '../flux/Dispatcher'
+import { MQTT_Disconnect, MQTT_Reconnect } from '../mqtt.init'
+import classnames from 'classnames'
 
 export default class Filter extends Component {
 
+  constructor (props) {
+    super(props)
+    this.store = this.props.store
+    this.getState = this.store.getState()
+    this.toggleState = false
+  }
+
   handleOnChangeTextFilter = (e) => {
     e.preventDefault()
-    Dispatcher.dispatch({
-      type: TypeActions.MQTT_FILTER_DEVICES_NAME,
-      data: e.target.value
-    })
+    // Dispatcher.dispatch({
+    //   type: TypeActions.MQTT_FILTER_DEVICES_NAME,
+    //   data: e.target.value
+    // })
   }
 
   handleOnCheckedOnline = (e) => {
-    Dispatcher.dispatch({
-      type: TypeActions.CHECKED_ONLINE,
-      data: e.target.checked
-    })
+    // Dispatcher.dispatch({
+    //   type: TypeActions.CHECKED_ONLINE,
+    //   data: e.target.checked
+    // })
   }
 
   handleOnCheckedOffline = (e) => {
-    Dispatcher.dispatch({
-      type: TypeActions.CHECKED_OFFLINE,
-      data: e.target.checked
-    })
+    // Dispatcher.dispatch({
+    //   type: TypeActions.CHECKED_OFFLINE,
+    //   data: e.target.checked
+    // })
   }
 
-  handleOnDisconnect = (e) => {
-    e.preventDefault()
-    Dispatcher.dispatch({
-      type: TypeActions.MQTT_DISCONNECT
-    })
+  handleOnDisconnect = () => {
+    if (this.toggleState === false) {
+      console.log('handleOnDisconnect')
+      MQTT_Disconnect()
+      this.toggleState = true
+    } else {
+      console.log('handleOnReconnect')
+      MQTT_Reconnect(this.getState.mqtt)
+      this.toggleState = false
+    }
   }
 
   render () {
+
+    let classHeader = classnames({
+      block: this.getState.disconnect === 'connected',
+      none: this.getState.disconnect !== 'connected'
+    })
+
+    let classButton = classnames({
+      'btn-danger': this.getState.connection === true,
+      'btn-success': this.getState.connection === false
+    })
+
+    let textButton = classnames({
+      Disconnect: this.getState.connection === true,
+      Connection: this.getState.connection === false
+    })
+
     return (
       <div className="col-12 col-md-12"
-           style={{marginBottom: 20, display: this.props.connection ? 'block' : 'none'}}>
+           style={{marginBottom: 20, display: classHeader}}>
         <div className="from-group">
           <div className="card">
             <div className="card-body">
@@ -61,10 +89,9 @@ export default class Filter extends Component {
                 </div>
                 <div className="col-12 col-md-2">
                   <div className="form-group">
-                    <button type='button' className='btn btn-danger' style={{width: '100%'}}
-                            onClick={e => this.handleOnDisconnect(e)}>
-                      <i className='fa fa-close'/>&nbsp;
-                      Disconnect
+                    <button type='button' className={'btn ' + classButton} style={{width: '100%'}}
+                            onClick={this.handleOnDisconnect}>
+                      {textButton}
                     </button>
                   </div>
                 </div>
