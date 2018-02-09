@@ -10,8 +10,7 @@ let initialState = {
   checkedOffline: false,
   connection: false,
   lwt: [],
-  specificUpdate: '',
-      mqtt: {
+  mqtt: {
     host: '',
     port: '',
     clientId: '',
@@ -21,7 +20,7 @@ let initialState = {
   }
 }
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
 
   switch (action.type) {
 
@@ -48,34 +47,15 @@ export default function(state = initialState, action) {
       let d = action.data.d
       let info = action.data.info
       let devices = state.devices
-      let dataOffline = action.data
+      let actionData = action.data
       if (state.lwt[`id-${info.id}`].status === 0) {
-        dataOffline.classCardHeader = 'card-header bg-secondary'
-      }
-
-      if (devices[d.myName] === undefined) {
-        devices[d.myName] = dataOffline
+        actionData.classCardHeader = 'card-header bg-secondary'
       } else {
-        dataOffline.classCardHeader = 'card-header bg-success'
-        devices[d.myName] = dataOffline
-        state.specificUpdate = d.myName
+        actionData.classCardHeader = 'card-header bg-success'
       }
-
+      devices[d.myName] = actionData
       Object.keys(devices).forEach((key, idx) => {
-        if (state.arrayDevices[idx] === undefined) {
-          state.arrayDevices[idx] = devices[key]
-        } else {
-          if (key === d.myName) {
-            // console.log('update only ', key)
-            devices[key].classUpdate = 'text-danger'
-            state.arrayDevices[idx] = devices[key]
-
-            setTimeout(() => {
-              devices[key].classUpdate = 'text-primary'
-              state.arrayDevices[idx] = devices[key]
-            }, 2000)
-          }
-        }
+        state.arrayDevices[idx] = devices[key]
       })
       break
 
@@ -108,7 +88,7 @@ export default function(state = initialState, action) {
       break
 
     default:
-      console.log('default state')
+      //console.log('default state')
       return state
 
   }

@@ -1,46 +1,35 @@
 import React, { Component } from 'react'
+import TimeUpdate from './TimeUpdate'
 
 let moment = require('moment-timezone')
 moment.locale('th')
 
+window.checkMillisUpdate = 0
+
 class Device extends Component {
 
   constructor (props) {
-    super (props)
-
+    super(props)
     this.data = this.props.data
-
-    // this.currentMillis = 0
-
-    // store.subscribe(() => {
-    //
-    //   console.log('store change')
-    //   console.log(store.getState())
-    //
-    // })
-
+    this.state = {
+      classUpdate: 'text-primary'
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-
+    window.checkMillisUpdate = nextProps.data.d.millis
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     let shouldUpdate = false
-
-    if (this.data.d.millis !== nextProps.data.d.millis) {
+    if (nextProps.data.d.millis > this.data.d.millis) {
       shouldUpdate = true
-      this.data = nextProps.data
+      this.data = {
+        ...nextProps.data,
+        ...{classCardHeader: 'card-header bg-success'}
+      }
     }
     return shouldUpdate
-  }
-
-  componentDidMount () {
-    console.log('componentDidMount : ', this.data.d.myName)
-  }
-
-  componentWillUnmount () {
-    console.log('componentWillUnmount : ', this.data.d.myName)
   }
 
   render () {
@@ -57,10 +46,9 @@ class Device extends Component {
               <p>run time : {moment(moment.now() - this.data.d.millis).fromNow()}</p>
               <p>millis : {this.data.d.millis}</p>
               <p>prefix : {this.data.info.prefix}</p>
-              <p className={this.data.classUpdate}>
-                <i className='fa fa-clock-o'/>&ensp;
-                {moment(this.data.d.timestamp).fromNow()}
-              </p>
+
+              <TimeUpdate data={this.data}/>
+
               <button className='btn btn-primary' style={{width: '100%'}}>
                 MORE INFO
               </button>
