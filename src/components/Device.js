@@ -15,6 +15,7 @@ class Device extends Component {
     this.state = {
       classUpdate: 'text-primary'
     }
+    this.runtime = moment.now() - this.data.d.millis
   }
 
   componentWillReceiveProps (nextProps) {
@@ -29,13 +30,31 @@ class Device extends Component {
         ...nextProps.data,
         ...{classCardHeader: 'card-header bg-success'}
       }
+      this.runtime = moment.now() - this.data.d.millis
     }
     return shouldUpdate
   }
 
+  componentDidMount () {
+    this.timer = setInterval(() => {
+      let currentMillis = moment.now() - this.data.d.millis
+      let timeout = (60000 * 5) // 5 minute
+      // console.log('currentMillis : ', currentMillis, ' run time : ', this.runtime)
+      if ((currentMillis - this.runtime) > timeout) {
+        // console.log(this.data.d.myName,' offline.')
+        this.data.classCardHeader = 'card-header bg-secondary'
+        this.forceUpdate()
+      }
+    }, 1000)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.timer)
+  }
+
   handleOnClick = (e) => {
     e.preventDefault()
-    return <ModalDevice />
+    return <ModalDevice/>
   }
 
   render () {
@@ -49,7 +68,7 @@ class Device extends Component {
             <div className="card-body text-primary">
               <p>ip : {this.data.info.ip}</p>
               <p>heap : {this.data.d.heap}</p>
-              <p>run time : {moment(moment.now() - this.data.d.millis).fromNow()}</p>
+              <p>run time : {moment(this.runtime).fromNow()}</p>
               <p>millis : {this.data.d.millis}</p>
               <p>prefix : {this.data.info.prefix}</p>
 

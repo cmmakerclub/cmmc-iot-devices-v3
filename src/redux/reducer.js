@@ -1,4 +1,8 @@
 import TypeActions from './constants'
+import _ from 'underscore'
+
+let moment = require('moment-timezone')
+moment.locale('th')
 
 let initialState = {
   devices: [],
@@ -48,6 +52,8 @@ export default function (state = initialState, action) {
 
     case TypeActions.MQTT_MESSAGE_ARRIVED:
       if (state.filterDevices.length === 0) {
+
+        // if (state.checkedOnline === false && state.checkedOffline === false) {
         let d = action.data.d
         let info = action.data.info
         let devices = state.devices
@@ -62,12 +68,37 @@ export default function (state = initialState, action) {
         Object.keys(devices).forEach((key, idx) => {
           state.arrayDevices[idx] = devices[key]
         })
+        // }
+
       } else {
-        state.arrayDevices.forEach((device, idx) => {
-          if (device.d.myName === action.data.d.myName) {
-            state.arrayDevices[idx] = action.data
-          }
-        })
+
+        if (state.checkedOnline === true && state.checkedOffline === false) {
+          let test = _.filter(state.arrayDevices, device => device.classCardHeader === 'card-header bg-success')
+          state.arrayDevices = test
+          console.log(test)
+          // let filterOnlineOnly = []
+          // state.arrayDevices.forEach(device => {
+          //   if (device.classCardHeader === 'card-header')
+          // })
+        }
+
+        if (state.checkedOffline === true && state.checkedOnline === false) {
+          let devicesOffline = []
+          state.arrayDevices.forEach(device => {
+            if (device.classCardHeader === 'card-header bg-secondary') {
+              devicesOffline.push(device)
+            }
+          })
+          state.arrayDevices = devicesOffline
+        }
+
+        if (state.checkedOnline === false && state.checkedOffline === false) {
+          state.arrayDevices.forEach((device, idx) => {
+            if (device.d.myName === action.data.d.myName) {
+              state.arrayDevices[idx] = action.data
+            }
+          })
+        }
       }
       break
 
@@ -90,11 +121,11 @@ export default function (state = initialState, action) {
       break
 
     case TypeActions.CHECKED_ONLINE:
-
+      state.checkedOnline = action.data
       break
 
     case TypeActions.CHECKED_OFFLINE:
-
+      state.checkedOnline = action.data
       break
 
     case TypeActions.DEVICES_ONLINE:

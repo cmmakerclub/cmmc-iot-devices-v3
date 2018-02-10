@@ -21,17 +21,17 @@ export default class Header extends Component {
   }
 
   handleOnCheckedOnline = (e) => {
-    // Dispatcher.dispatch({
-    //   type: TypeActions.CHECKED_ONLINE,
-    //   data: e.target.checked
-    // })
+    this.store.dispatch({
+      type: ActionTypes.CHECKED_ONLINE,
+      data: e.target.checked
+    })
   }
 
   handleOnCheckedOffline = (e) => {
-    // Dispatcher.dispatch({
-    //   type: TypeActions.CHECKED_OFFLINE,
-    //   data: e.target.checked
-    // })
+    this.store.dispatch({
+      type: ActionTypes.CHECKED_OFFLINE,
+      data: e.target.checked
+    })
   }
 
   handleOnDisconnect = () => {
