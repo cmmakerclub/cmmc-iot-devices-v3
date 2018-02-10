@@ -73,32 +73,37 @@ export default function (state = initialState, action) {
       } else {
 
         if (state.checkedOnline === true && state.checkedOffline === false) {
-          let test = _.filter(state.arrayDevices, device => device.classCardHeader === 'card-header bg-success')
-          state.arrayDevices = test
-          console.log(test)
-          // let filterOnlineOnly = []
-          // state.arrayDevices.forEach(device => {
-          //   if (device.classCardHeader === 'card-header')
-          // })
+          // console.log('online checked')
+          let onlineOnly = []
+          state.arrayDevices.forEach(device => {
+            if (device.classCardHeader === 'card-header bg-success') {
+              onlineOnly.push(device)
+            }
+          })
+          state.arrayDevices = onlineOnly
         }
 
         if (state.checkedOffline === true && state.checkedOnline === false) {
-          let devicesOffline = []
+          // console.log('offline checked')
+          let offlineOnly = []
           state.arrayDevices.forEach(device => {
             if (device.classCardHeader === 'card-header bg-secondary') {
-              devicesOffline.push(device)
+              offlineOnly.push(device)
             }
           })
-          state.arrayDevices = devicesOffline
+          state.arrayDevices = offlineOnly
         }
 
-        if (state.checkedOnline === false && state.checkedOffline === false) {
+        if ((state.checkedOnline === false && state.checkedOffline === false) ||
+          (state.checkedOnline === true && state.checkedOffline === true)) {
+          // console.log('online unchecked, offline unchecked')
           state.arrayDevices.forEach((device, idx) => {
             if (device.d.myName === action.data.d.myName) {
               state.arrayDevices[idx] = action.data
             }
           })
         }
+
       }
       break
 
@@ -125,7 +130,7 @@ export default function (state = initialState, action) {
       break
 
     case TypeActions.CHECKED_OFFLINE:
-      state.checkedOnline = action.data
+      state.checkedOffline = action.data
       break
 
     case TypeActions.DEVICES_ONLINE:
