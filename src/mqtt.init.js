@@ -9,6 +9,8 @@ window.MQTTGlobal = ''
 
 const MQTT_Connect = (init) => {
 
+  console.log(init)
+
   let options = {
     clientId: init.clientId,
     clean: true,
@@ -25,6 +27,7 @@ const MQTT_Connect = (init) => {
   client.on('connect', function () {
     client.subscribe(init.topic)
     client.subscribe('CMMC/+/lwt')
+    // client.publish("CMMC/4639313/$/command", "OFF")
     window.MQTTGlobal = client
     store.dispatch({
       type: TypeActions.MQTT_CONNECTION_SUCCESS
@@ -84,6 +87,9 @@ const MQTT_Disconnect = () => {
 }
 
 const MQTT_Publish = (topic, value) => {
+  // console.log(topic, value)
+  // console.log(window.MQTTGlobal)
+  // debugger
   window.MQTTGlobal.publish(topic, value)
 }
 

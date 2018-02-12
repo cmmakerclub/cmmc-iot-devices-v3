@@ -34,19 +34,33 @@ export default class Connection extends Component {
     console.log('Connection willUnmount')
   }
 
-  handleOnConnect = (e) => {
-    e.preventDefault()
+  handleOnConnect = () => {
     this.store.dispatch({
       type: TypeActions.MQTT_CONFIG,
       data: this.state.mqtt
     })
+    //console.log('before ', this.state.mqtt)
     MQTT_Connect(this.state.mqtt)
   }
 
+  onChangeHost = (e) => {
+    let host = Object.assign({}, this.state.mqtt, {host: e.target.value})
+    this.setState({mqtt: host})
+  }
+
+  onChangeUsername = (e) => {
+    let username = Object.assign({}, this.state.mqtt, {username: e.target.value})
+    this.setState({mqtt: username})
+  }
+
+  onChangePassword = (e) => {
+    let password = Object.assign({}, this.state.mqtt, {password: e.target.value})
+    this.setState({mqtt: password})
+  }
+
   onChangeTopic = (e) => {
-    let mqtt = this.state.mqtt
-    mqtt.topic = e.target.value
-    this.setState({mqtt: mqtt})
+    let topic = Object.assign({}, this.state.mqtt, {topic: e.target.value})
+    this.setState({mqtt: topic})
   }
 
   render () {
@@ -73,8 +87,8 @@ export default class Connection extends Component {
 
                 <div className="form-group">
                   Host
-                  <input type="text" className='form-control' defaultValue={'mqtt.cmmc.io'}
-                         onChange={e => this.setState({host: e.target.value})}/>
+                  <input type="text" className='form-control' defaultValue={this.state.mqtt.host}
+                         onChange={e => this.onChangeHost(e)}/>
                 </div>
                 <div className="form-group">
                   Port
@@ -83,19 +97,19 @@ export default class Connection extends Component {
                 </div>
                 <div className="form-group">
                   ClientID
-                  <input type="text" className='form-control' defaultValue={this.state.clientId}
+                  <input type="text" className='form-control' defaultValue={this.state.mqtt.clientId}
                   />
                 </div>
                 <div className="form-group">
                   Username
                   <input type="text" className='form-control'
-                         onChange={e => this.setState({username: e.target.value})}
+                         onChange={e => this.onChangeUsername(e)}
                          autoComplete="current-username"/>
                 </div>
                 <div className="form-group">
                   Password
                   <input type="password" className='form-control'
-                         onChange={e => this.setState({password: e.target.value})}
+                         onChange={e => this.onChangePassword(e)}
                          autoComplete="current-password"/>
                 </div>
                 <div className="form-group">
@@ -105,7 +119,7 @@ export default class Connection extends Component {
                 </div>
                 <div className="form-group" style={{display: classConnectionSuccess}}>
                   <button type='button' className='btn btn-success' style={{width: '100%'}}
-                          onClick={e => this.handleOnConnect(e)}>
+                          onClick={this.handleOnConnect}>
                     <i className='fa fa-globe'/> Connect
                   </button>
                 </div>

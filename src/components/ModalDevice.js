@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 import uuid from 'uuid'
+import { MQTT_Publish } from '../mqtt.init'
 
 const customStyles = {
   content: {
@@ -48,6 +49,12 @@ export default class ModalDevice extends Component {
   closeModal () {
     console.log('close click')
     this.setState({modalIsOpen: false})
+  }
+
+  publish (e, command) {
+    e.preventDefault()
+    let topic = `CMMC/${this.props.data.info.id}/$/command`
+    MQTT_Publish(topic, command)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -111,7 +118,9 @@ export default class ModalDevice extends Component {
             </table>
           </div>
           <div className="form-group float-right">
-            <button type='button' className='btn btn-danger' onClick={this.closeModal}>close</button>
+            <button type='button' className='btn btn-success' style={{marginRight: 10}} onClick={e => this.publish(e, 'ON')}>ON</button>
+            <button type='button' className='btn btn-warning' style={{marginRight: 10, color: 'white'}} onClick={e => this.publish(e, 'OFF')}>OFF</button>
+            <button type='button' className='btn btn-danger' onClick={this.closeModal}>CLOSE</button>
           </div>
         </Modal>
       </div>
