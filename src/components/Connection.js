@@ -48,6 +48,11 @@ export default class Connection extends Component {
     this.setState({mqtt: host})
   }
 
+  onChangePort = (e) => {
+    let port = Object.assign({}, this.state.mqtt, {port: e.target.value})
+    this.setState({mqtt: port})
+  }
+
   onChangeUsername = (e) => {
     let username = Object.assign({}, this.state.mqtt, {username: e.target.value})
     this.setState({mqtt: username})
@@ -92,8 +97,8 @@ export default class Connection extends Component {
                 </div>
                 <div className="form-group">
                   Port
-                  <input type="text" className='form-control' defaultValue={9001}
-                         onChange={e => this.setState({port: e.target.value})}/>
+                  <input type="text" className='form-control' defaultValue={this.state.mqtt.port}
+                         onChange={e => this.onChangePort(e)}/>
                 </div>
                 <div className="form-group">
                   ClientID
