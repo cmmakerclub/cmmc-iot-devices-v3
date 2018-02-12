@@ -30,7 +30,7 @@ export default class Connection extends Component {
     })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     console.log('Connection willUnmount')
   }
 
@@ -41,6 +41,12 @@ export default class Connection extends Component {
       data: this.state.mqtt
     })
     MQTT_Connect(this.state.mqtt)
+  }
+
+  onChangeTopic = (e) => {
+    let mqtt = this.state.mqtt
+    mqtt.topic = e.target.value
+    this.setState({mqtt: mqtt})
   }
 
   render () {
@@ -95,7 +101,7 @@ export default class Connection extends Component {
                 <div className="form-group">
                   Topic
                   <input type="text" className='form-control' defaultValue={this.state.mqtt.topic}
-                         onChange={e => this.setState({topic: e.target.value})}/>
+                         onChange={e => this.onChangeTopic(e)}/>
                 </div>
                 <div className="form-group" style={{display: classConnectionSuccess}}>
                   <button type='button' className='btn btn-success' style={{width: '100%'}}
