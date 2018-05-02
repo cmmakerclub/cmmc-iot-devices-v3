@@ -10,10 +10,12 @@ export default class Header extends Component {
     this.store = this.props.store
     this.getState = this.store.getState()
     this.toggleState = false
+    this.search_device = ''
   }
 
   handleOnChangeTextFilter = (e) => {
     e.preventDefault()
+    this.search_device = e.target.value
     this.store.dispatch({
       type: ActionTypes.MQTT_FILTER_DEVICES_NAME,
       data: e.target.value
@@ -21,17 +23,35 @@ export default class Header extends Component {
   }
 
   handleOnCheckedOnline = (e) => {
+
+    if (e.target.checked) {
+      this.store.dispatch({
+        type: ActionTypes.MQTT_FILTER_DEVICES_NAME,
+        data: this.search_device
+      })
+    }
+
     this.store.dispatch({
       type: ActionTypes.CHECKED_ONLINE,
       data: e.target.checked
     })
+
   }
 
   handleOnCheckedOffline = (e) => {
+
+    if (e.target.checked) {
+      this.store.dispatch({
+        type: ActionTypes.CHECKED_OFFLINE,
+        data: this.search_device
+      })
+    }
+
     this.store.dispatch({
       type: ActionTypes.CHECKED_OFFLINE,
       data: e.target.checked
     })
+
   }
 
   handleOnDisconnect = () => {

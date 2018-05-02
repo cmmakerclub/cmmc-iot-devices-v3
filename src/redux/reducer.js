@@ -1,5 +1,4 @@
 import TypeActions from './constants'
-import _ from 'underscore'
 
 let moment = require('moment-timezone')
 moment.locale('th')
