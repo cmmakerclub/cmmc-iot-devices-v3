@@ -11,6 +11,8 @@ export default class Header extends Component {
     this.getState = this.store.getState()
     this.toggleState = false
     this.search_device = ''
+    this.checkedOnline = false
+    this.checkedOffline = false
   }
 
   handleOnChangeTextFilter = (e) => {
@@ -22,13 +24,19 @@ export default class Header extends Component {
     })
   }
 
+  filterOnline = () => {
+    this.store.dispatch({
+      type: ActionTypes.MQTT_FILTER_DEVICES_NAME,
+      data: this.search_device
+    })
+  }
+
   handleOnCheckedOnline = (e) => {
 
-    if (e.target.checked) {
-      this.store.dispatch({
-        type: ActionTypes.MQTT_FILTER_DEVICES_NAME,
-        data: this.search_device
-      })
+    this.checkedOnline = e.target.checked
+
+    if (e.target.checked || (!this.checkedOnline && !this.checkedOffline)) {
+      this.filterOnline()
     }
 
     this.store.dispatch({
@@ -39,6 +47,12 @@ export default class Header extends Component {
   }
 
   handleOnCheckedOffline = (e) => {
+
+    this.checkedOffline = e.target.checked
+
+    if (!this.checkedOnline && !this.checkedOffline) {
+      this.filterOnline()
+    }
 
     if (e.target.checked) {
       this.store.dispatch({
