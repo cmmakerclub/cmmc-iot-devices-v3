@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import TypeActions from '../redux/constants'
+import mqtt_config from '../mqtt.config'
 import { MQTT_Connect } from '../mqtt.init'
 import classNames from 'classnames'
 
@@ -9,12 +9,12 @@ export default class Connection extends Component {
     super(props)
     this.state = {
       mqtt: {
-        host: 'mqtt.cmmc.io',
-        port: 9001,
-        clientId: 'CMMC_' + Math.random().toString(16).substr(2, 8),
-        username: '',
-        password: '',
-        topic: 'CMMC/#'
+        host: mqtt_config.host,
+        port: mqtt_config.port,
+        clientId: mqtt_config.clientId,
+        username: mqtt_config.username,
+        password: mqtt_config.password,
+        topic: mqtt_config.topic
       },
       connection: false
     }
@@ -24,7 +24,6 @@ export default class Connection extends Component {
 
     this.store.subscribe(() => {
       if (this.getState.connection && this.state.connection === false) {
-        // console.log('set state connection')
         this.setState({connection: this.getState.connection})
       }
     })
@@ -35,11 +34,6 @@ export default class Connection extends Component {
   }
 
   handleOnConnect = () => {
-    this.store.dispatch({
-      type: TypeActions.MQTT_CONFIG,
-      data: this.state.mqtt
-    })
-    //console.log('before ', this.state.mqtt)
     MQTT_Connect(this.state.mqtt)
   }
 

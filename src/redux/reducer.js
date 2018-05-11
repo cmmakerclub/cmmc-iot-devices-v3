@@ -13,31 +13,12 @@ let initialState = {
   checkedOffline: false,
   connection: false,
   disconnect: false,
-  lwt: [],
-  mqtt: {
-    host: '',
-    port: '',
-    clientId: '',
-    username: '',
-    password: '',
-    topic: ''
-  }
+  lwt: []
 }
 
 export default function (state = initialState, action) {
 
   switch (action.type) {
-
-    case TypeActions.MQTT_CONNECT :
-      state.mqtt = {
-        host: action.data.host,
-        port: action.data.port,
-        clientId: action.data.clientId,
-        username: action.data.username,
-        password: action.data.password,
-        topic: action.data.topic
-      }
-      break
 
     case TypeActions.MQTT_DISCONNECT:
       state.connection = false
