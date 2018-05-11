@@ -103,12 +103,14 @@ export default class Connection extends Component {
                   Username
                   <input type="text" className='form-control'
                          onChange={e => this.onChangeUsername(e)}
+                         defaultValue={this.state.mqtt.username}
                          autoComplete="current-username"/>
                 </div>
                 <div className="form-group">
                   Password
                   <input type="password" className='form-control'
                          onChange={e => this.onChangePassword(e)}
+                         defaultValue={this.state.mqtt.password}
                          autoComplete="current-password"/>
                 </div>
                 <div className="form-group">
