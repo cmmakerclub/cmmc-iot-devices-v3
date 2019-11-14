@@ -27,7 +27,7 @@ export default class TimeUpdate extends Component {
     this.timer = setInterval(() => {
       // console.log('old : ', this.data.d.millis, ' new : ', this.nextMillis, ' device : ', this.data.d.myName)
       // console.log(this.data)
-      console.log(`my interval`);
+      //console.log(`my interval`);
       if (this.nextMillis !== this.data.d.millis) {
         this.data.d.millis = this.nextMillis;
         this.setState({

@@ -68,16 +68,19 @@ class Device extends Component {
 							<span style={{ color: "white" }}>{this.data.d.myName}</span>
 						</div>
 						<div className="card-body text-primary">
-							<p>ip : {this.data.info.ip}</p>
+							<p>ip: {this.data.info.ip}</p>
+							<p>ssid: {this.data.info.ssid}</p>
+							<p>PM 2.5: {this.data.d.pm2_5}µg/m3</p>
+							<p>PM 10: {this.data.d.pm10}µg/m3</p>
+							{/*<p>version: {this.data.d.appVersion}</p>*/}
 							{/*<p>heap : {this.data.d.heap}</p>*/}
-							<p>started: {moment(this.runtime).fromNow()}</p>
-							<p>{this.data.info.prefix}</p>
+							{/*<p>runtime: {moment(this.runtime).fromNow()}</p>*/}
+							{/*<p>{this.data.info.prefix}</p>*/}
 							<p>Mac: {this.data.info.mac}</p>
 							<p>Last seen: {moment.unix(this.data.d.server_timestamp / 1000).fromNow()}</p>
 							{/*<p>= {moment.now() - (this.data.d.server_timestamp)}</p>*/}
 							<TimeUpdate data={this.data}/>
 							<ModalDevice data={this.data}/>
-
 						</div>
 					</div>
 				</div>

@@ -41,8 +41,7 @@ const MQTT_Connect = (init) => {
 		try {
 			let messageIncome = JSON.parse(message.toString());
 
-			console.log(messageIncome);
-
+			//console.log(messageIncome);
 			//if (messageIncome.status !== undefined && messageIncome.id !== undefined) { // lwt check
 			//	store.dispatch({
 			//		type: TypeActions.LWT,
@@ -61,7 +60,7 @@ const MQTT_Connect = (init) => {
 				let diff_s = diff_ms/1000;
 				//console.log(`[diff]  ${messageIncome.d.myName} = ${diff_ms}`);
 				if (packet.retain) {
-					if (diff_s < 3600) {
+					if (diff_s < 1000) {
 						messageIncome.classCardHeader = `card-header bg-success ${diff_s}`;
 						store.dispatch({
 							type: TypeActions.MQTT_MESSAGE_ARRIVED,
@@ -76,7 +75,6 @@ const MQTT_Connect = (init) => {
 					}
 
 				} else {
-					console.log("here");
 					messageIncome.classCardHeader = "card-header bg-success  x";
 					store.dispatch({
 						type: TypeActions.MQTT_MESSAGE_ARRIVED,
