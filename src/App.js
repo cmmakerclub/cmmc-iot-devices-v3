@@ -33,9 +33,9 @@ export default class App extends Component {
       <div className="container">
         <div className="row" style={{marginTop: 20}}>
           <div className="col-12 col-md-12">
-            <a href="">
-              <img src={logo} style={{height: 40, marginBottom: 20}} alt=""/>
-            </a>
+            {/*<a href="">*/}
+            {/*  <img src={logo} style={{height: 40, marginBottom: 20}} alt=""/>*/}
+            {/*</a>*/}
           </div>
           <Filter store={this.store}/>
           <Connection store={this.store}/>

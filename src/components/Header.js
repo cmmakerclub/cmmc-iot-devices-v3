@@ -111,23 +111,23 @@ export default class Header extends Component {
                 </div>
                 <div className="col-12 col-md-3 text-center col-form-label">
 
-                  <div className="form-check form-check-inline">
-                    <input type="checkbox" className="form-check-input" onChange={this.handleOnCheckedOnline}/>
-                    <label className="form-check-label text-success">Online</label>
-                  </div>
+                  {/*<div className="form-check form-check-inline">*/}
+                  {/*  <input type="checkbox" className="form-check-input" onChange={this.handleOnCheckedOnline}/>*/}
+                  {/*  <label className="form-check-label text-success">Online</label>*/}
+                  {/*</div>*/}
 
-                  <div className="form-check form-check-inline">
-                    <input type="checkbox" className="form-check-input" onChange={this.handleOnCheckedOffline}/>
-                    <label className="form-check-label text-secondary">Offline</label>
-                  </div>
+                  {/*<div className="form-check form-check-inline">*/}
+                  {/*  <input type="checkbox" className="form-check-input" onChange={this.handleOnCheckedOffline}/>*/}
+                  {/*  <label className="form-check-label text-secondary">Offline</label>*/}
+                  {/*</div>*/}
 
                 </div>
                 <div className="col-12 col-md-2">
                   <div className="form-group">
-                    <button type='button' className={'btn ' + classButton} style={{width: '100%'}}
-                            onClick={this.handleOnDisconnect}>
-                      {textButton}
-                    </button>
+                    {/*<button type='button' className={'btn ' + classButton} style={{width: '100%'}}*/}
+                    {/*        onClick={this.handleOnDisconnect}>*/}
+                    {/*  {textButton}*/}
+                    {/*</button>*/}
                   </div>
                 </div>
               </div>

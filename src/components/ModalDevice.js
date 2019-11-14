@@ -1,80 +1,80 @@
-import React, { Component } from 'react'
-import Modal from 'react-modal'
-import uuid from 'uuid'
-import { MQTT_Publish } from '../mqtt.init'
+import React, {Component} from "react";
+import Modal from "react-modal";
+import uuid from "uuid";
+import {MQTT_Publish} from "../mqtt.init";
 
 const customStyles = {
   content: {
-    position: 'absolute',
-    top: '40px',
-    left: '40px',
-    right: '40px',
-    bottom: '40px',
-    border: '1px solid #ccc',
-    background: '#fff',
-    overflow: 'auto',
-    WebkitOverflowScrolling: 'touch',
-    borderRadius: '4px',
-    outline: 'none',
-    padding: '20px'
+    position: "absolute",
+    top: "40px",
+    left: "40px",
+    right: "40px",
+    bottom: "40px",
+    border: "1px solid #ccc",
+    background: "#fff",
+    overflow: "auto",
+    WebkitOverflowScrolling: "touch",
+    borderRadius: "4px",
+    outline: "none",
+    padding: "20px"
   }
-}
+};
 
 export default class ModalDevice extends Component {
-  constructor () {
-    super()
+  constructor() {
+    super();
 
     this.state = {
       modalIsOpen: false,
       dataTable: []
-    }
+    };
 
-    this.openModal = this.openModal.bind(this)
-    this.afterOpenModal = this.afterOpenModal.bind(this)
-    this.closeModal = this.closeModal.bind(this)
+    this.openModal = this.openModal.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
 
-    Modal.setAppElement('#root')
+    Modal.setAppElement("#root");
   }
 
-  openModal () {
-    console.log('open click')
-    this.setState({modalIsOpen: true})
+  openModal() {
+    console.log("open click");
+    this.setState({ modalIsOpen: true });
   }
 
-  afterOpenModal () {
+  afterOpenModal() {
     // references are now sync'd and can be accessed.
-    console.log('do something after open modal')
+    console.log("do something after open modal");
   }
 
-  closeModal () {
-    console.log('close click')
-    this.setState({modalIsOpen: false})
+  closeModal() {
+    console.log("close click");
+    this.setState({ modalIsOpen: false });
   }
 
-  publish (e, command) {
-    e.preventDefault()
-    let topic = `CMMC/${this.props.data.info.id}/$/command`
-    MQTT_Publish(topic, command)
+  publish(e, command) {
+    e.preventDefault();
+    let topic = `CMMC/${this.props.data.info.id}/$/command`;
+    MQTT_Publish(topic, command);
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     //console.log(nextProps.data)
 
-    let info = nextProps.data.info
-    let d = nextProps.data.d
+    let info = nextProps.data.info;
+    let d = nextProps.data.d;
 
-    let dataTable = []
+    let dataTable = [];
     Object.keys(d).forEach((keyData, idxData) => {
 
-      let infoTitle = ''
-      let infoData = ''
+      let infoTitle = "";
+      let infoData = "";
 
       Object.keys(info).forEach((keyInfo, idxInfo) => {
         if (idxInfo === idxData) {
-          infoTitle = keyInfo
-          infoData = info[keyInfo]
+          infoTitle = keyInfo;
+          infoData = info[keyInfo];
         }
-      })
+      });
 
       dataTable.push(
         <tr key={uuid()}>
@@ -83,16 +83,16 @@ export default class ModalDevice extends Component {
           <td>{infoTitle}</td>
           <td>{infoData}</td>
         </tr>
-      )
-    })
+      );
+    });
 
-    this.setState({dataTable: dataTable})
+    this.setState({ dataTable: dataTable });
   }
 
-  render () {
+  render() {
     return (
       <div>
-        <button type='button' className='btn btn-primary' style={{width: '100%'}} onClick={this.openModal}>
+        <button type='button' className='btn btn-primary' style={{ width: "100%" }} onClick={this.openModal}>
           MORE INFO
         </button>
         <Modal
@@ -117,13 +117,17 @@ export default class ModalDevice extends Component {
               </tbody>
             </table>
           </div>
-          <div className="form-group float-right">
-            <button type='button' className='btn btn-success' style={{marginRight: 10}} onClick={e => this.publish(e, 'ON')}>ON</button>
-            <button type='button' className='btn btn-warning' style={{marginRight: 10, color: 'white'}} onClick={e => this.publish(e, 'OFF')}>OFF</button>
-            <button type='button' className='btn btn-danger' onClick={this.closeModal}>CLOSE</button>
-          </div>
+          {/*<div className="form-group float-right">*/}
+          {/*  <button type='button' className='btn btn-success' style={{ marginRight: 10 }}*/}
+          {/*          onClick={e => this.publish(e, "ON")}>ON*/}
+          {/*  </button>*/}
+          {/*  <button type='button' className='btn btn-warning' style={{ marginRight: 10, color: "white" }}*/}
+          {/*          onClick={e => this.publish(e, "OFF")}>OFF*/}
+          {/*  </button>*/}
+          {/*  <button type='button' className='btn btn-danger' onClick={this.closeModal}>CLOSE</button>*/}
+          {/*</div>*/}
         </Modal>
       </div>
-    )
+    );
   }
 }
